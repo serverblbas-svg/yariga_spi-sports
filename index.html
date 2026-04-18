@@ -5,212 +5,441 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>yariga_spi sports</title>
     <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body { 
-            background: linear-gradient(135deg, #0b0e11 0%, #1a1f25 100%); 
-            color: white; 
+            background: #0a0a0a; 
+            color: #fff; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
         }
-        .container { width: 95%; max-width: 1200px; margin: 20px auto; padding: 10px; }
         
-        .main-header {
-            text-align: center; padding: 15px; margin-bottom: 20px;
-            background: linear-gradient(90deg, #6a11cb, #2575fc);
-            border-radius: 12px; box-shadow: 0 4px 20px rgba(37, 117, 252, 0.4);
+        /* 🔥 iStar Style Header */
+        .istar-header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid #e94560;
+            box-shadow: 0 4px 30px rgba(233, 69, 96, 0.3);
         }
-        .main-header h1 { font-size: 1.5rem; font-weight: bold; }
-        .main-header img { width: 40px; vertical-align: middle; margin-left: 8px; }
         
+        .istar-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .istar-logo i {
+            font-size: 2.5rem;
+            color: #e94560;
+            text-shadow: 0 0 20px rgba(233, 69, 96, 0.8);
+        }
+        
+        .istar-logo h1 {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(90deg, #fff, #e94560);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .istar-logo span {
+            color: #e94560;
+            font-weight: normal;
+        }
+        
+        /* 🔥 Main Container */
+        .container { 
+            width: 95%; 
+            max-width: 1400px; 
+            margin: 20px auto; 
+            padding: 10px; 
+        }
+        
+        /* 🔥 Player Section - iStar Style */
         .player-section { 
-            background: #000; border-radius: 15px; overflow: hidden; 
-            border: 2px solid #6a11cb; margin-bottom: 20px;
-            box-shadow: 0 0 30px rgba(106, 17, 203, 0.3);
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            border-radius: 20px; 
+            overflow: hidden; 
+            border: 2px solid #e94560; 
+            margin-bottom: 25px;
+            box-shadow: 0 0 40px rgba(233, 69, 96, 0.2);
         }
-        .header-title { 
-            background: linear-gradient(90deg, #6a11cb, #2575fc); 
-            color: #fff; padding: 12px 15px; text-align: center; 
-            font-weight: bold; font-size: 1.1rem;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
+        
+        .player-header { 
+            background: linear-gradient(90deg, #e94560, #0f3460); 
+            color: #fff; 
+            padding: 15px 20px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
         }
-        .live-indicator { display: flex; align-items: center; gap: 5px; font-size: 0.9rem; }
+        
+        .player-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .player-title i {
+            color: #ffd700;
+        }
+        
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 0, 0, 0.2);
+            padding: 8px 16px;
+            border-radius: 25px;
+            border: 1px solid #ff4444;
+        }
+        
         .live-dot { 
-            width: 10px; height: 10px; background: #ff4b2b; border-radius: 50%; 
-            animation: blink 1s infinite; box-shadow: 0 0 10px #ff4b2b;
-        }
-        @keyframes blink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.9)} }
-        
-        .video-js { width: 100%; height: auto; min-height: 250px; background: #000; }
-        
-        .channels-wrapper {
-            background: rgba(26, 29, 33, 0.95); border-radius: 15px; padding: 15px;
-            border: 1px solid #333; max-height: 500px; overflow-y: auto;
-        }
-        .channels-wrapper::-webkit-scrollbar { width: 8px; }
-        .channels-wrapper::-webkit-scrollbar-track { background: #1a1f25; border-radius: 10px; }
-        .channels-wrapper::-webkit-scrollbar-thumb { 
-            background: linear-gradient(180deg, #6a11cb, #2575fc); border-radius: 10px;
+            width: 12px; 
+            height: 12px; 
+            background: #ff0000; 
+            border-radius: 50%; 
+            animation: pulse 1.5s infinite;
+            box-shadow: 0 0 15px #ff0000;
         }
         
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+        @keyframes pulse { 
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
         
-        .btn {
-            background: linear-gradient(145deg, #252a30, #1e2328);
-            border: 1px solid #444; color: white; padding: 12px 10px; 
-            border-radius: 10px; cursor: pointer; text-align: center; 
-            font-size: 0.8rem; transition: all 0.25s ease;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            min-height: 70px; position: relative; overflow: hidden;
+        .video-js { 
+            width: 100%; 
+            height: auto; 
+            min-height: 300px; 
+            background: #000; 
         }
-        .btn::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-            background: linear-gradient(90deg, #6a11cb, #2575fc); opacity: 0; transition: 0.2s;
-        }
-        .btn:hover { 
-            background: linear-gradient(145deg, #6a11cb, #2575fc); 
-            color: #fff; border-color: #fff; transform: translateY(-3px); 
-            box-shadow: 0 5px 20px rgba(106, 17, 203, 0.5); font-weight: 600;
-        }
-        .btn:hover::before { opacity: 1; }
-        .btn.active { 
-            background: linear-gradient(145deg, #6a11cb, #2575fc); 
-            color: #fff; border: 2px solid #fff; transform: scale(1.03);
-            box-shadow: 0 0 25px rgba(106, 17, 203, 0.7); font-weight: bold;
-        }
-        .btn-quality {
-            font-size: 0.7rem; color: #aaa; margin-top: 4px;
-            background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px;
-        }
-        .btn.active .btn-quality { color: #fff; background: rgba(0,0,0,0.2); }
         
+        /* 🔥 Channels Section - iStar Grid */
+        .channels-section {
+            background: linear-gradient(145deg, #1a1a2e, #0f3460);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid #e94560;
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #e94560;
+            border-bottom: 2px solid #e94560;
+            padding-bottom: 15px;
+        }
+        
+        .section-title i {
+            font-size: 1.5rem;
+        }
+        
+        .channels-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+            gap: 15px; 
+        }
+        
+        /* 🔥 iStar Channel Button */
+        .channel-btn {
+            background: linear-gradient(145deg, #16213e, #0f3460);
+            border: 2px solid #0f3460; 
+            color: #fff; 
+            padding: 18px 15px; 
+            border-radius: 15px; 
+            cursor: pointer; 
+            text-align: center; 
+            font-size: 0.95rem; 
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .channel-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(233, 69, 96, 0.3), transparent);
+            transition: 0.5s;
+        }
+        
+        .channel-btn:hover::before {
+            left: 100%;
+        }
+        
+        .channel-btn:hover { 
+            background: linear-gradient(145deg, #e94560, #0f3460); 
+            border-color: #e94560;
+            transform: translateY(-5px) scale(1.02); 
+            box-shadow: 0 10px 30px rgba(233, 69, 96, 0.4);
+        }
+        
+        .channel-btn.active { 
+            background: linear-gradient(145deg, #e94560, #ff6b6b); 
+            border-color: #fff;
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(233, 69, 96, 0.8);
+        }
+        
+        .channel-btn i {
+            font-size: 1.8rem;
+            color: #e94560;
+            transition: 0.3s;
+        }
+        
+        .channel-btn:hover i,
+        .channel-btn.active i {
+            color: #fff;
+        }
+        
+        .channel-name {
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .quality-badge {
+            font-size: 0.75rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .quality-4k {
+            background: linear-gradient(90deg, #ffd700, #ffaa00);
+            color: #000;
+        }
+        
+        .quality-hd {
+            background: linear-gradient(90deg, #00ff88, #00cc6a);
+            color: #000;
+        }
+        
+        .quality-sd {
+            background: linear-gradient(90deg, #66ccff, #3399ff);
+            color: #000;
+        }
+        
+        /* 🔥 Error & Loading */
         .error-msg {
-            background: rgba(255, 75, 43, 0.2); border: 1px solid #ff4b2b;
-            color: #ff6b55; padding: 10px 15px; border-radius: 8px;
-            margin: 10px; text-align: center; display: none;
-        }
-        .loading {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            color: #6a11cb; font-size: 1rem; display: none;
+            background: rgba(233, 69, 96, 0.2);
+            border: 2px solid #e94560;
+            color: #ff6b6b;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px;
+            text-align: center;
+            display: none;
+            font-weight: bold;
         }
         
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #e94560;
+            font-size: 1.2rem;
+            display: none;
+            font-weight: bold;
+        }
+        
+        /* 🔥 Footer */
+        .istar-footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            color: #666;
+            border-top: 1px solid #333;
+        }
+        
+        /* 🔥 Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { 
+            background: linear-gradient(180deg, #e94560, #0f3460); 
+            border-radius: 10px;
+        }
+        
+        /* 🔥 Responsive */
         @media (max-width: 768px) {
-            .grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
-            .btn { padding: 10px 8px; min-height: 60px; font-size: 0.75rem; }
-            .main-header h1 { font-size: 1.2rem; }
+            .istar-logo h1 { font-size: 1.3rem; }
+            .channels-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+            .channel-btn { padding: 15px 10px; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="main-header">
-        <h1><img src="https://raw.githubusercontent.com/kamalblbas/logo/main/bein.png" alt="beIN"> beIN Sports - PREMIUM</h1>
-    </div>
-    
-    <div class="player-section">
-        <div class="header-title">
-            <span id="ch-name">🔴 هەڵبژاردنی کەناڵ</span>
-            <span class="live-indicator"><span class="live-dot"></span> LIVE</span>
+    <!-- 🔥 iStar Header -->
+    <div class="istar-header">
+        <div class="istar-logo">
+            <i class="fas fa-satellite-dish"></i>
+            <h1>yariga_<span>spi sports</span></h1>
         </div>
-        <div class="error-msg" id="error-msg">⚠️ هەڵە لە بارکردنی ڤیدیۆ</div>
-        <div class="loading" id="loading">⏳ چاوەڕێ بە...</div>
-        <video id="main-video" class="video-js vjs-default-skin vjs-16-9" controls preload="metadata" muted></video>
     </div>
-    
-    <div class="channels-wrapper">
-        <div class="grid" id="channel-grid"></div>
-    </div>
-</div>
 
-<script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
-<script>
-    // 📺 تەنها کەناڵەکانی yariga_spi sports
-    const channels = [
-        { name:"spi_quran hd", url:"https://live20.bozztv.com/giatv/giatv-spi_quran_hd/spi_quran_hd/chunks.m3u8", quality:"HD" },
-        { name:"dekanquran", url:"https://live20.bozztv.com/giatv/giatv-dekanquran/dekanquran/chunks.m3u8", quality:"HD" },
-        { name:"spitv4k", url:"https://live20.bozztv.com/giatv/giatv-spitv4k_kamalblbas/spitv4k_kamalblbas/chunks.m3u8", quality:"HD" },
-        { name:"spi_sports_hd", url:"https://live20.bozztv.com/giatv/giatv-spi_sports_hd/spi_sports_hd/chunks.m3u8", quality:"HD" },
-
-        // 🔥 BEIN 4K
-        { name:"BEIN NEWS 4K", url:"http://a83967.xyz:8080/971424234/942337642/375047", quality:"4K" },
-        { name:"BEIN ULTRA 4K", url:"http://a83967.xyz:8080/971424234/942337642/464382", quality:"4K" },
-        { name:"BEIN 2 4K", url:"http://a83967.xyz:8080/971424234/942337642/219719", quality:"4K" },
-        { name:"BEIN 3 4K", url:"http://a83967.xyz:8080/971424234/942337642/129372", quality:"4K" },
-        { name:"BEIN 5 4K", url:"http://a83967.xyz:8080/971424234/942337642/129374", quality:"4K" },
-        { name:"BEIN 7 4K", url:"http://a83967.xyz:8080/971424234/942337642/375051", quality:"4K" },
-        { name:"BEIN 8 4K", url:"http://a83967.xyz:8080/971424234/942337642/375050", quality:"4K" },
-
-        // 🔥 BEIN HD
-        { name:"Bein 1 HD", url:"http://a83967.xyz:8080/971424234/942337642/124234", quality:"HD" },
-        { name:"Bein 2 HD", url:"http://a83967.xyz:8080/971424234/942337642/219728", quality:"HD" },
-        { name:"Bein 3 HD", url:"http://a83967.xyz:8080/971424234/942337642/380478", quality:"HD" },
-        { name:"Bein 4 HD", url:"http://a83967.xyz:8080/971424234/942337642/247201", quality:"HD" },
-        { name:"Bein 9 HD", url:"http://a83967.xyz:8080/971424234/942337642/124242", quality:"HD" },
-
-        // 🔥 SD
-        { name:"Bein 3 SD", url:"http://a83967.xyz:8080/971424234/942337642/247209", quality:"SD" },
-        { name:"Bein 4 SD", url:"http://a83967.xyz:8080/971424234/942337642/219739", quality:"SD" },
-        { name:"Bein 7 SD", url:"http://a83967.xyz:8080/971424234/942337642/384168", quality:"SD" },
-
-        // 🔥 ALWAN
-        { name:"Alwan Sport 1 4K", url:"http://a83967.xyz:8080/971424234/942337642/288315", quality:"4K" },
-        { name:"Alwan Sport 2 HD", url:"http://a83967.xyz:8080/971424234/942337642/288311", quality:"HD" },
-        { name:"Alwan Sport 3 HD", url:"http://a83967.xyz:8080/971424234/942337642/288308", quality:"HD" },
-        { name:"Alwan UFC 4K", url:"http://a83967.xyz:8080/971424234/942337642/384822", quality:"4K" },
-        { name:"Alwan F1 4K", url:"http://a83967.xyz:8080/971424234/942337642/384827", quality:"4K" }
-    ];
-
-    const player = videojs('main-video', {
-        html5: { hls: { overrideNative: true }, nativeAudioTracks: false, nativeVideoTracks: false },
-        fluid: true, aspectRatio: '16:9', controls: true, preload: 'metadata', muted: true, autoplay: false
-    });
-
-    const channelGrid = document.getElementById('channel-grid');
-    const chName = document.getElementById('ch-name');
-    const errorMsg = document.getElementById('error-msg');
-    const loading = document.getElementById('loading');
-
-    function renderChannels() {
-        channelGrid.innerHTML = '';
-        channels.forEach((channel, index) => {
-            const btn = document.createElement('div');
-            btn.className = 'btn';
-            btn.innerHTML = `${channel.name}<span class="btn-quality">${channel.quality}</span>`;
-            btn.onclick = () => playChannel(channel, btn);
-            channelGrid.appendChild(btn);
-        });
-    }
-
-    function playChannel(channel, btnElement) {
-        document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
-        btnElement.classList.add('active');
-        chName.innerHTML = `🔴 ${channel.name}`;
-        errorMsg.style.display = 'none';
-        loading.style.display = 'block';
+    <div class="container">
+        <!-- 🔥 Player Section -->
+        <div class="player-section">
+            <div class="player-header">
+                <div class="player-title">
+                    <i class="fas fa-play-circle"></i>
+                    <span id="ch-name">هەڵبژاردنی کەناڵ</span>
+                </div>
+                <div class="live-badge">
+                    <span class="live-dot"></span>
+                    <span>LIVE</span>
+                </div>
+            </div>
+            <div class="error-msg" id="error-msg">
+                <i class="fas fa-exclamation-triangle"></i> هەڵە لە بارکردنی ڤیدیۆ
+            </div>
+            <div class="loading" id="loading">
+                <i class="fas fa-spinner fa-spin"></i> چاوەڕێ بە...
+            </div>
+            <video id="main-video" class="video-js vjs-default-skin vjs-16-9" controls preload="metadata" muted></video>
+        </div>
         
-        try {
-            player.src({ src: channel.url, type: 'application/x-mpegURL' });
-            player.play().catch(e => {
-                errorMsg.textContent = '⚠️ تکایە کلیک لەسەر پلەیر بکە';
-                errorMsg.style.display = 'block';
+        <!-- 🔥 Channels Section -->
+        <div class="channels-section">
+            <div class="section-title">
+                <i class="fas fa-th-large"></i>
+                <span>کەناڵەکان</span>
+            </div>
+            <div class="channels-grid" id="channel-grid"></div>
+        </div>
+    </div>
+
+    <!-- 🔥 Footer -->
+    <div class="istar-footer">
+        <p>© 2024 yariga_spi sports - All Rights Reserved</p>
+    </div>
+
+    <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
+    <script>
+        // 📺 کەناڵەکان
+        const channels = [
+            { name:"SPI Quran HD", url:"https://live20.bozztv.com/giatv/giatv-spi_quran_hd/spi_quran_hd/chunks.m3u8", quality:"HD", icon:"fa-book-quran" },
+            { name:"Dekan Quran", url:"https://live20.bozztv.com/giatv/giatv-dekanquran/dekanquran/chunks.m3u8", quality:"HD", icon:"fa-mosque" },
+            { name:"SPI TV 4K", url:"https://live20.bozztv.com/giatv/giatv-spitv4k_kamalblbas/spitv4k_kamalblbas/chunks.m3u8", quality:"HD", icon:"fa-tv" },
+            { name:"SPI Sports HD", url:"https://live20.bozztv.com/giatv/giatv-spi_sports_hd/spi_sports_hd/chunks.m3u8", quality:"HD", icon:"fa-futbol" },
+
+            // 🔥 BEIN 4K
+            { name:"BEIN News 4K", url:"http://a83967.xyz:8080/971424234/942337642/375047", quality:"4K", icon:"fa-newspaper" },
+            { name:"BEIN Ultra 4K", url:"http://a83967.xyz:8080/971424234/942337642/464382", quality:"4K", icon:"fa-star" },
+            { name:"BEIN 2 4K", url:"http://a83967.xyz:8080/971424234/942337642/219719", quality:"4K", icon:"fa-futbol" },
+            { name:"BEIN 3 4K", url:"http://a83967.xyz:8080/971424234/942337642/129372", quality:"4K", icon:"fa-futbol" },
+            { name:"BEIN 5 4K", url:"http://a83967.xyz:8080/971424234/942337642/129374", quality:"4K", icon:"fa-futbol" },
+            { name:"BEIN 7 4K", url:"http://a83967.xyz:8080/971424234/942337642/375051", quality:"4K", icon:"fa-futbol" },
+            { name:"BEIN 8 4K", url:"http://a83967.xyz:8080/971424234/942337642/375050", quality:"4K", icon:"fa-futbol" },
+
+            // 🔥 BEIN HD
+            { name:"BEIN 1 HD", url:"http://a83967.xyz:8080/971424234/942337642/124234", quality:"HD", icon:"fa-futbol" },
+            { name:"BEIN 2 HD", url:"http://a83967.xyz:8080/971424234/942337642/219728", quality:"HD", icon:"fa-futbol" },
+            { name:"BEIN 3 HD", url:"http://a83967.xyz:8080/971424234/942337642/380478", quality:"HD", icon:"fa-futbol" },
+            { name:"BEIN 4 HD", url:"http://a83967.xyz:8080/971424234/942337642/247201", quality:"HD", icon:"fa-futbol" },
+            { name:"BEIN 9 HD", url:"http://a83967.xyz:8080/971424234/942337642/124242", quality:"HD", icon:"fa-futbol" },
+
+            // 🔥 SD
+            { name:"BEIN 3 SD", url:"http://a83967.xyz:8080/971424234/942337642/247209", quality:"SD", icon:"fa-futbol" },
+            { name:"BEIN 4 SD", url:"http://a83967.xyz:8080/971424234/942337642/219739", quality:"SD", icon:"fa-futbol" },
+            { name:"BEIN 7 SD", url:"http://a83967.xyz:8080/971424234/942337642/384168", quality:"SD", icon:"fa-futbol" },
+
+            // 🔥 ALWAN
+            { name:"Alwan Sport 1 4K", url:"http://a83967.xyz:8080/971424234/942337642/288315", quality:"4K", icon:"fa-trophy" },
+            { name:"Alwan Sport 2 HD", url:"http://a83967.xyz:8080/971424234/942337642/288311", quality:"HD", icon:"fa-trophy" },
+            { name:"Alwan Sport 3 HD", url:"http://a83967.xyz:8080/971424234/942337642/288308", quality:"HD", icon:"fa-trophy" },
+            { name:"Alwan UFC 4K", url:"http://a83967.xyz:8080/971424234/942337642/384822", quality:"4K", icon:"fa-hand-fist" },
+            { name:"Alwan F1 4K", url:"http://a83967.xyz:8080/971424234/942337642/384827", quality:"4K", icon:"fa-flag-checkered" }
+        ];
+
+        const player = videojs('main-video', {
+            html5: { hls: { overrideNative: true }, nativeAudioTracks: false, nativeVideoTracks: false },
+            fluid: true, aspectRatio: '16:9', controls: true, preload: 'metadata', muted: true, autoplay: false
+        });
+
+        const channelGrid = document.getElementById('channel-grid');
+        const chName = document.getElementById('ch-name');
+        const errorMsg = document.getElementById('error-msg');
+        const loading = document.getElementById('loading');
+
+        function getQualityClass(quality) {
+            switch(quality) {
+                case '4K': return 'quality-4k';
+                case 'HD': return 'quality-hd';
+                case 'SD': return 'quality-sd';
+                default: return 'quality-hd';
+            }
+        }
+
+        function renderChannels() {
+            channelGrid.innerHTML = '';
+            channels.forEach((channel, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'channel-btn';
+                btn.innerHTML = `
+                    <i class="fas ${channel.icon}"></i>
+                    <span class="channel-name">${channel.name}</span>
+                    <span class="quality-badge ${getQualityClass(channel.quality)}">${channel.quality}</span>
+                `;
+                btn.onclick = () => playChannel(channel, btn);
+                channelGrid.appendChild(btn);
             });
-        } catch (err) {
-            errorMsg.textContent = '⚠️ نەتوانرا کەناڵەکە بکرێتەوە';
-            errorMsg.style.display = 'block';
-        } finally { loading.style.display = 'none'; }
-    }
+        }
 
-    player.on('error', () => {
-        errorMsg.textContent = '⚠️ هەڵە لە بارکردنی ڤیدیۆ';
-        errorMsg.style.display = 'block'; loading.style.display = 'none';
-    });
-    player.on('playing', () => errorMsg.style.display = 'none');
+        function playChannel(channel, btnElement) {
+            document.querySelectorAll('.channel-btn').forEach(b => b.classList.remove('active'));
+            btnElement.classList.add('active');
+            chName.innerHTML = `<i class="fas fa-play-circle"></i> ${channel.name}`;
+            errorMsg.style.display = 'none';
+            loading.style.display = 'block';
+            
+            try {
+                player.src({ src: channel.url, type: 'application/x-mpegURL' });
+                player.play().catch(e => {
+                    errorMsg.innerHTML = '<i class="fas fa-exclamation-triangle"></i> تکایە کلیک لەسەر پلەیر بکە';
+                    errorMsg.style.display = 'block';
+                });
+            } catch (err) {
+                errorMsg.innerHTML = '<i class="fas fa-exclamation-triangle"></i> نەتوانرا کەناڵەکە بکرێتەوە';
+                errorMsg.style.display = 'block';
+            } finally { 
+                loading.style.display = 'none'; 
+            }
+        }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        renderChannels();
-        if (channels.length > 0) playChannel(channels[0], document.querySelector('.btn'));
-    });
-</script>
+        player.on('error', () => {
+            errorMsg.innerHTML = '<i class="fas fa-exclamation-triangle"></i> هەڵە لە بارکردنی ڤیدیۆ';
+            errorMsg.style.display = 'block'; 
+            loading.style.display = 'none';
+        });
+        
+        player.on('playing', () => errorMsg.style.display = 'none');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderChannels();
+            if (channels.length > 0) playChannel(channels[0], document.querySelector('.channel-btn'));
+        });
+    </script>
 </body>
 </html>
