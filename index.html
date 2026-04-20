@@ -2,849 +2,722 @@
 <html lang="ku" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>
-    kurdish-channels
- - پەخشی پیشەسازی</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>📺 KURDISH CHANNELS - 161 کەناڵ</title>
+    
+    <!-- HLS.js بۆ پەخشکردن -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    
+    <!-- Font Awesome بۆ ئایکۆنەکان -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
     <style>
+        /* ==================== ڕێکخستنی گشتی ==================== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
-            font-family: 'Poppins', 'Segoe UI', Tahoma, system-ui;
-            background: linear-gradient(145deg, #0a0f1e 0%, #0a1a2f 50%, #03060c 100%);
+            font-family: 'Segoe UI', 'Tahoma', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             min-height: 100vh;
-            color: #fff;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #f1f5f9;
+            padding: 16px;
+            direction: rtl;
         }
-
-        /* Fullscreen Mode */
-        body.fullscreen-active {
-            overflow: hidden;
-            background: #000;
-        }
-
-        body.fullscreen-active .app-container {
-            border-radius: 0;
-            padding: 0;
-            margin: 0;
-            max-width: 100%;
-            height: 100vh;
-            background: #000;
-            backdrop-filter: none;
-        }
-
-        body.fullscreen-active .header,
-        body.fullscreen-active .filters,
-        body.fullscreen-active .channels-grid,
-        body.fullscreen-active .player-footer .live-badge,
-        body.fullscreen-active .theme-toggle {
-            display: none;
-        }
-
-        body.fullscreen-active .player-area {
-            margin-bottom: 0;
-            border-radius: 0;
-            height: 100vh;
-            position: relative;
-        }
-
-        body.fullscreen-active #videoPlayer {
-            height: 100vh;
-            aspect-ratio: unset;
-            object-fit: contain;
-        }
-
-        body.fullscreen-active .player-footer {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            right: 30px;
-            background: linear-gradient(135deg, rgba(0,0,0,0.85), rgba(0,0,0,0.7));
+        
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(15, 23, 42, 0.8);
             backdrop-filter: blur(20px);
-            border-radius: 60px;
-            padding: 12px 25px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            animation: slideUp 0.5s ease;
+            border-radius: 28px;
+            padding: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        body.fullscreen-active .player-footer .now-playing {
-            font-size: 1.2rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        body.fullscreen-active .player-footer .live-badge {
-            display: inline-block;
-            background: #e50914;
-            padding: 5px 15px;
-            border-radius: 40px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            letter-spacing: 1px;
-            animation: pulse 1.5s infinite;
-        }
-
-        body.fullscreen-active .exit-fullscreen-hint {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(10px);
-            padding: 8px 18px;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            z-index: 1001;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 1px solid rgba(255,255,255,0.2);
-            font-weight: 500;
-        }
-
-        body.fullscreen-active .exit-fullscreen-hint:hover {
-            background: rgba(255,65,108,0.8);
-            transform: scale(1.05);
-        }
-
-        /* Glassmorphism Container */
-        .app-container {
-            max-width: 1600px;
-            margin: 20px auto;
-            background: rgba(10, 25, 45, 0.45);
-            backdrop-filter: blur(16px);
-            border-radius: 48px;
-            padding: 28px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 35px 60px rgba(0, 0, 0, 0.4);
-            transition: all 0.4s ease;
-        }
-
-        /* Header */
+        
+        /* ==================== هێدەر ==================== */
         .header {
             text-align: center;
-            margin-bottom: 35px;
-            position: relative;
+            margin-bottom: 24px;
         }
-
-        .logo {
-            font-size: 2.8rem;
+        
+        .header h1 {
+            font-size: 2.5rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #FF6A5C, #FF416C, #FF6A5C);
-            background-size: 200% auto;
+            background: linear-gradient(135deg, #f0b90b, #ff6b6b);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            animation: shimmer 3s linear infinite;
-            letter-spacing: 1px;
+            margin-bottom: 8px;
         }
-
-        @keyframes shimmer {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        
+        .header h1 i {
+            color: #f0b90b;
+            margin: 0 8px;
         }
-
-        .logo span {
-            background: linear-gradient(135deg, #00D2FF, #3A7BD5, #00D2FF);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: shimmer 3s linear infinite;
+        
+        .stats-badge {
+            display: inline-block;
+            background: rgba(240, 185, 11, 0.2);
+            padding: 6px 20px;
+            border-radius: 40px;
+            font-size: 1rem;
+            border: 1px solid rgba(240, 185, 11, 0.3);
+            color: #f0b90b;
         }
-
-        .sub {
-            color: rgba(255,255,255,0.65);
-            margin-top: 10px;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-        }
-
-        /* Buttons */
-        .theme-toggle, .fullscreen-control {
-            position: absolute;
-            top: 0;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 50px;
-            padding: 10px 20px;
-            cursor: pointer;
-            color: white;
-            font-size: 0.9rem;
-            backdrop-filter: blur(8px);
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-
-        .theme-toggle {
-            left: 20px;
-        }
-
-        .fullscreen-control {
-            right: 20px;
-        }
-
-        .theme-toggle:hover, .fullscreen-control:hover {
-            background: rgba(255,65,108,0.7);
-            border-color: rgba(255,255,255,0.3);
-            transform: translateY(-2px);
-        }
-
-        /* Video Player */
-        .player-area {
+        
+        /* ==================== ڤیدیۆ پلەیەر ==================== */
+        .player-wrapper {
             background: #000;
-            border-radius: 32px;
+            border-radius: 20px;
             overflow: hidden;
-            margin-bottom: 40px;
-            border: 1px solid rgba(255,255,255,0.15);
-            box-shadow: 0 25px 45px -12px rgba(0,0,0,0.5);
-            transition: all 0.3s;
+            margin-bottom: 24px;
+            border: 2px solid rgba(240, 185, 11, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
-
+        
         #videoPlayer {
             width: 100%;
-            aspect-ratio: 16/9;
-            background: #0a0a0a;
+            aspect-ratio: 16 / 9;
+            display: block;
+            background: #000;
         }
-
-        .player-footer {
-            padding: 15px 25px;
-            background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,0,0,0.5));
+        
+        .player-info {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
+            padding: 12px 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
-
-        .now-playing {
+        
+        #currentChannel {
             font-weight: 600;
             font-size: 1.1rem;
             display: flex;
             align-items: center;
             gap: 10px;
         }
-
-        .now-playing i {
-            color: #FF416C;
-            font-size: 1.2rem;
+        
+        #currentChannel i {
+            color: #f0b90b;
         }
-
+        
         .live-badge {
-            background: linear-gradient(135deg, #e50914, #ff4d4d);
-            padding: 5px 16px;
-            border-radius: 50px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            letter-spacing: 1.5px;
+            background: #ef4444;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
             animation: pulse 1.5s infinite;
-            box-shadow: 0 0 10px rgba(229,9,20,0.5);
         }
-
+        
         @keyframes pulse {
-            0% { opacity: 0.7; transform: scale(0.96);}
-            100% { opacity: 1; transform: scale(1);}
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
         }
-
-        /* Filters */
-        .filters {
+        
+        /* ==================== کۆنترۆڵەکان ==================== */
+        .controls-bar {
             display: flex;
             flex-wrap: wrap;
             gap: 15px;
-            margin-bottom: 30px;
-            justify-content: space-between;
+            margin-bottom: 24px;
             align-items: center;
         }
-
+        
         .search-box {
             flex: 2;
-            min-width: 240px;
+            min-width: 250px;
         }
-
+        
         .search-box input {
             width: 100%;
-            padding: 14px 24px;
-            border-radius: 60px;
-            border: none;
-            background: rgba(255,255,255,0.08);
-            backdrop-filter: blur(8px);
+            padding: 14px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
             color: white;
             font-size: 1rem;
             outline: none;
             transition: all 0.3s;
-            border: 1px solid rgba(255,255,255,0.1);
         }
-
+        
         .search-box input:focus {
-            background: rgba(255,255,255,0.15);
-            border-color: #FF416C;
+            border-color: #f0b90b;
+            background: rgba(255, 255, 255, 0.15);
         }
-
+        
         .search-box input::placeholder {
-            color: rgba(255,255,255,0.5);
+            color: rgba(255, 255, 255, 0.6);
         }
-
-        .category-filter select {
-            padding: 14px 28px;
-            border-radius: 60px;
-            background: rgba(255,255,255,0.08);
-            backdrop-filter: blur(8px);
+        
+        .category-box {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .category-box select {
+            width: 100%;
+            padding: 14px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
             color: white;
-            border: 1px solid rgba(255,255,255,0.1);
             font-size: 1rem;
-            cursor: pointer;
             outline: none;
-            transition: all 0.3s;
+            cursor: pointer;
         }
-
-        .category-filter select:hover {
-            background: rgba(255,255,255,0.15);
-            border-color: #FF416C;
+        
+        .category-box select option {
+            background: #1e293b;
+            color: white;
         }
-
-        .stats {
-            background: rgba(255,65,108,0.2);
-            backdrop-filter: blur(8px);
-            padding: 8px 20px;
-            border-radius: 60px;
-            font-size: 0.85rem;
+        
+        .counter {
+            padding: 10px 20px;
+            background: rgba(240, 185, 11, 0.15);
+            border-radius: 50px;
+            border: 1px solid rgba(240, 185, 11, 0.3);
+            color: #f0b90b;
             font-weight: 500;
-            border: 1px solid rgba(255,65,108,0.3);
+            white-space: nowrap;
         }
-
-        /* Channels Grid - Professional Design */
+        
+        /* ==================== گریدی کەناڵەکان ==================== */
         .channels-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-            gap: 22px;
-            max-height: 600px;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 16px;
+            max-height: 500px;
             overflow-y: auto;
-            padding: 8px 8px 20px 8px;
+            padding: 8px 4px;
         }
-
+        
+        .channels-grid::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .channels-grid::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        .channels-grid::-webkit-scrollbar-thumb {
+            background: #f0b90b;
+            border-radius: 10px;
+        }
+        
+        /* ==================== کارتی کەناڵ ==================== */
         .channel-card {
-            background: linear-gradient(145deg, rgba(25, 40, 65, 0.7), rgba(15, 25, 45, 0.8));
-            backdrop-filter: blur(8px);
-            border-radius: 28px;
-            padding: 18px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 16px 10px;
             cursor: pointer;
             text-align: center;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(255,255,255,0.08);
-            position: relative;
-            overflow: hidden;
+            transition: all 0.25s ease;
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
-
-        .channel-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: left 0.5s;
-        }
-
-        .channel-card:hover::before {
-            left: 100%;
-        }
-
+        
         .channel-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            background: linear-gradient(145deg, rgba(45, 65, 100, 0.9), rgba(35, 50, 80, 0.9));
-            border-color: rgba(255,65,108,0.6);
-            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
+            transform: translateY(-5px);
+            background: rgba(240, 185, 11, 0.15);
+            border-color: #f0b90b;
+            box-shadow: 0 10px 20px rgba(240, 185, 11, 0.2);
         }
-
+        
         .channel-card.active {
-            background: linear-gradient(135deg, #FF416C, #FF6A5C);
+            background: linear-gradient(135deg, #f0b90b, #ff6b6b);
             border: none;
-            box-shadow: 0 15px 30px rgba(255,65,108,0.4);
+            box-shadow: 0 8px 20px rgba(240, 185, 11, 0.4);
         }
-
-        .channel-card.active .channel-name {
-            color: white;
-        }
-
+        
         .channel-logo {
             width: 80px;
             height: 80px;
             margin: 0 auto 12px;
-            background: rgba(0,0,0,0.35);
+            background: rgba(0, 0, 0, 0.3);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            transition: all 0.3s;
-            border: 2px solid rgba(255,255,255,0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
         }
-
-        .channel-card:hover .channel-logo {
-            transform: scale(1.05);
-            border-color: #FF416C;
+        
+        .channel-card.active .channel-logo {
+            border-color: white;
         }
-
+        
         .channel-logo img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            border-radius: 50%;
         }
-
+        
         .channel-logo i {
             font-size: 2.5rem;
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.8);
         }
-
+        
         .channel-name {
-            font-weight: 700;
+            font-weight: 600;
             font-size: 0.9rem;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            color: rgba(255,255,255,0.95);
         }
-
+        
         .channel-group {
             font-size: 0.7rem;
-            opacity: 0.65;
-            letter-spacing: 0.5px;
+            opacity: 0.7;
         }
-
-        /* Scrollbar */
-        .channels-grid::-webkit-scrollbar {
-            width: 6px;
+        
+        .channel-card.active .channel-name,
+        .channel-card.active .channel-group {
+            color: white;
         }
-
-        .channels-grid::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
+        
+        /* ==================== پەڕەی بەتاڵ ==================== */
+        .empty-message {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.2rem;
         }
-
-        .channels-grid::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #FF416C, #FF6A5C);
-            border-radius: 10px;
-        }
-
-        /* Light Theme */
-        body.light {
-            background: linear-gradient(145deg, #e8ecf2 0%, #dce1e8 100%);
-            color: #1a1a2e;
-        }
-
-        body.light .app-container {
-            background: rgba(255,255,255,0.4);
-            backdrop-filter: blur(16px);
-            border-color: rgba(0,0,0,0.08);
-        }
-
-        body.light .channel-card {
-            background: rgba(255,255,255,0.7);
-            color: #1a1a2e;
-            border-color: rgba(0,0,0,0.05);
-        }
-
-        body.light .channel-card .channel-name {
-            color: #1a1a2e;
-        }
-
-        body.light .search-box input,
-        body.light .category-filter select {
-            background: rgba(0,0,0,0.06);
-            color: #1a1a2e;
-            border-color: rgba(0,0,0,0.1);
-        }
-
-        body.light .stats {
-            background: rgba(255,65,108,0.15);
-            color: #1a1a2e;
-        }
-
+        
+        /* ==================== ریسپۆنسیڤ ==================== */
         @media (max-width: 768px) {
-            .app-container { padding: 18px; margin: 10px; }
-            .channels-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
-            .channel-name { font-size: 0.75rem; }
-            .channel-logo { width: 60px; height: 60px; }
-            .logo { font-size: 1.8rem; }
+            body {
+                padding: 8px;
+            }
+            
+            .main-container {
+                padding: 16px;
+                border-radius: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .channels-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 10px;
+                max-height: 400px;
+            }
+            
+            .channel-logo {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .channel-name {
+                font-size: 0.8rem;
+            }
+            
+            .controls-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box, .category-box {
+                min-width: 100%;
+            }
+            
+            .counter {
+                text-align: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .channels-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* ==================== فووتەر ==================== */
+        .footer {
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
+        }
+        
+        .footer a {
+            color: #f0b90b;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-<div class="app-container">
-    <div class="header">
-        <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i> <span>ڕووناکی</span></button>
-        <button class="fullscreen-control" id="forceFullscreenBtn"><i class="fas fa-expand"></i> <span>شاشەی پڕ</span></button>
-        <div class="logo">SPI <span>TV</span> 4K</div>
-        <div class="sub">پەخشی ڕاستەوخۆ بە کوالێتی 4K | ١٦١+ کەناڵ</div>
-    </div>
-
-    <div class="player-area">
-        <video id="videoPlayer" controls playsinline></video>
-        <div class="player-footer">
-            <div class="now-playing">
-                <i class="fas fa-tower-broadcast"></i>
-                <span id="currentChannelName">هیچ کەناڵێک هەڵنەبژێراوە</span>
-            </div>
-            <div class="live-badge">
-                <i class="fas fa-circle" style="font-size: 0.6rem; margin-right: 5px;"></i> LIVE
+    <div class="main-container">
+        
+        <!-- هێدەر -->
+        <div class="header">
+            <h1>
+                <i class="fas fa-satellite-dish"></i>
+                KURDISH CHANNELS
+                <i class="fas fa-tv"></i>
+            </h1>
+            <div class="stats-badge">
+                <i class="fas fa-play-circle"></i> ١٦١ کەناڵی ڕاستەوخۆ
             </div>
         </div>
-    </div>
-
-    <div class="filters">
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="🔍 گەڕان لە نێوان ١٦١ کەناڵدا...">
+        
+        <!-- ڤیدیۆ پلەیەر -->
+        <div class="player-wrapper">
+            <video id="videoPlayer" controls playsinline></video>
+            <div class="player-info">
+                <div id="currentChannel">
+                    <i class="fas fa-tower-broadcast"></i>
+                    <span>کەناڵێک هەڵبژێرە</span>
+                </div>
+                <div class="live-badge">
+                    <i class="fas fa-circle"></i> LIVE
+                </div>
+            </div>
         </div>
-        <div class="category-filter">
-            <select id="categorySelect">
-                <option value="ALL">📡 هەموو کەناڵەکان</option>
-            </select>
+        
+        <!-- کۆنترۆڵەکان -->
+        <div class="controls-bar">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 گەڕان بە ناوی کەناڵ...">
+            </div>
+            <div class="category-box">
+                <select id="categorySelect">
+                    <option value="ALL">📡 هەموو کەناڵەکان</option>
+                </select>
+            </div>
+            <div class="counter" id="channelCounter">
+                <i class="fas fa-list"></i> <span id="countDisplay">0</span> کەناڵ
+            </div>
         </div>
-        <div class="stats" id="stats">بارکردن...</div>
+        
+        <!-- گریدی کەناڵەکان -->
+        <div class="channels-grid" id="channelsGrid"></div>
+        
+        <!-- فووتەر -->
+        <div class="footer">
+            <p>✨ <a href="#">KAMAL PRO ULTRA</a> - IPTV PLAYER ✨</p>
+            <p style="margin-top: 8px; font-size: 0.75rem;">© 2026 - هەموو مافەکان پارێزراون</p>
+        </div>
     </div>
 
-    <div class="channels-grid" id="channelsGrid">
-        <div style="text-align:center; padding:60px;"><i class="fas fa-spinner fa-spin"></i> بارکردنی کەناڵەکان...</div>
-    </div>
-</div>
+    <script>
+        // ==================== ١٦١ کەناڵ ====================
+        const allChannels = [
+            { name: "ESRA TV 1", logo: "https://logo.m3uassets.com/pesrayatv.png", group: "KURDISH", url: "https://live20.bozztv.com/giatv/giatv-ESRAHD/ESRAHD/chunks.m3u8" },
+            { name: "ESRA TV 2", logo: "https://logo.m3uassets.com/pesrayatv.png", group: "KURDISH", url: "https://live20.bozztv.com/giatv/giatv-esra2hd_kamalblbas/esra2hd_kamalblbas/chunks.m3u8" },
+            { name: "spi kids 4k", logo: "https://logo.m3uassets.com/id.png", group: "KURDISH", url: "https://live20.bozztv.com/giatv/giatv-spikids4k2025/spikids4k2025/chunks.m3u8" },
+            { name: "کەناڵی ئامۆژگاری", logo: "https://amozhgary.tv/style/img/logo.png", group: "KURDISH", url: "https://app-live.org/live/3268334b/index.m3u8" },
+            { name: "ئەکادیمیای ئامۆژگاری", logo: "https://amozhgary.tv/style/img/academy_logo.png", group: "KURDISH", url: "https://app-live.org/live/a267c1b3/index.m3u8" },
+            { name: "Rawshan hd", logo: "https://logo.m3uassets.com/shanxi.png", group: "KURDISH", url: "http://rawshan.ddns.net:1935/live/rawshantv/playlist.m3u8" },
+            { name: "BARIN QURAN", logo: "https://logo.m3uassets.com/bahrainquran.png", group: "KURDISH", url: "http://baskhd.ddns.net:40/live/QURANHDTV/HawezHD.m3u8" },
+            { name: "EMAN", logo: "https://logo.m3uassets.com/a.png", group: "KURDISH", url: "http://avrstream.com:1935/live/emantv/playlist.m3u8" },
+            { name: "NaqshiMedia", logo: "https://logo.m3uassets.com/a.png", group: "KURDISH", url: "http://naqshi-media.com:1935/live/NaqshiMedia/playlist.m3u8" },
+            { name: "AVA TV HD", logo: "https://logo.m3uassets.com/avatv.png", group: "KURDISH", url: "http://hlspackager.akamaized.net/live/DB/AVA_TV/HLS/AVA_TV.m3u8" },
+            { name: "K24 FHD", logo: "https://logo.m3uassets.com/k24.png", group: "KURDISH", url: "https://d1x82nydcxndze.cloudfront.net/live/index.m3u8" },
+            { name: "Channel 8 HD", logo: "https://logo.m3uassets.com/channel8.png", group: "KURDISH", url: "https://live.channel8.com/Channel8-Kurdish/index.m3u8" },
+            { name: "KURDSAT", logo: "https://logo.m3uassets.com/kurdsat.png", group: "KURDISH", url: "https://hlspackager.akamaized.net/live/DB/KURDSAT_HD/HLS/KURDSAT_HD.m3u8" },
+            { name: "KURDSAT NEWS", logo: "https://logo.m3uassets.com/kurdsatnews.png", group: "KURDISH", url: "https://hlspackager.akamaized.net/live/DB/KURDSAT_NEWS/HLS/KURDSAT_NEWS.m3u8" },
+            { name: "Soran Entertainment", logo: "https://logo.m3uassets.com/ransentertainment.png", group: "KURDISH", url: "http://avrstream.com:1935/live/SoranEntertainment/playlist.m3u8" },
+            { name: "shnatv", logo: "https://logo.m3uassets.com/natv.png", group: "KURDISH", url: "http://shnatv.ddns.net:1935/live/shnatv/playlist.m3u8" },
+            { name: "ZAGROS TV", logo: "https://logo.m3uassets.com/zagrostv.png", group: "KURDISH", url: "https://5a3ed7a72ed4b.streamlock.net/zagrostv/SMIL:myStream.smil/chunklist_w469474030_b1700000_sleng_t64MTA4MHA=.m3u8" },
+            { name: "KHAK TV", logo: "https://logo.m3uassets.com/aktv.png", group: "KURDISH", url: "http://bblserver.ddns.net:1935/stream/khakhd/hawezhd.m3u8" },
+            { name: "zaroktv", logo: "https://logo.m3uassets.com/zaroktv.png", group: "KURDISH", url: "https://zindikurmanci.zaroktv.com.tr/hls/0/stream.m3u8" },
+            { name: "Pro TV Quran", logo: "https://logo.m3uassets.com/a.png", group: "KURDISH", url: "http://tv.ezanvaktipro.com/hls/quran.m3u8" },
+            { name: "ISHTAR TV", logo: "https://logo.m3uassets.com/ishtartv.png", group: "KURDISH", url: "http://ishtartv.badinan.xyz:1935/live/iShtarHD/playlist.m3u8" },
+            { name: "Minara FM", logo: "https://logo.m3uassets.com/minara.png", group: "KURDISH", url: "http://bblserver.ddns.net:1935/live/mihrabfm/playlist.m3u8" },
+            { name: "graryantv", logo: "https://logo.m3uassets.com/grantv.png", group: "KURDISH", url: "https://live20.bozztv.com/giatv/giatv-halabja88garyan/halabja88garyan/chunks.m3u8" },
+            { name: "PAYAM TV", logo: "https://logo.m3uassets.com/payamtv.png", group: "KURDISH", url: "https://media2.streambrothers.com:1936/8218/8218/kurdtv1.m3u8" },
+            { name: "AFRIN TV FHD", logo: "https://logo.m3uassets.com/afarintv.png", group: "KURDISH", url: "http://afarintv.flashmediacast.com:1935/afarinTV/livestream/playlist.m3u8" },
+            { name: "AFRIN باخچە", logo: "https://logo.m3uassets.com/a.png", group: "KURDISH", url: "http://afarintv2.flashmediacast.com:1935/afarinTV/livestream/playlist.m3u8" },
+            { name: "AFRIN KIDS", logo: "https://logo.m3uassets.com/pinkids.png", group: "KURDISH", url: "http://afarintv2.flashmediacast.com:1935/afarinTV/d1/livestream/HawezHD.m3u8" },
+            { name: "Kirkuk TV", logo: "https://logo.m3uassets.com/kirkuktv.png", group: "KURDISH", url: "https://live.kirkuklive.live/hls/stream/index.m3u8" },
+            { name: "BAHA ENTERTAINMENT", logo: "https://logo.m3uassets.com/entertainment.png", group: "KURDISH", url: "http://baskhd.ddns.net:40/live/baskhd/yusfstore.m3u8" },
+            { name: "SOZ QURAN", logo: "https://logo.m3uassets.com/quran.png", group: "KURDISH", url: "http://live20.bozztv.com/giatv/giatv-sozquran/sozquran/chunks.m3u8" },
+            { name: "sozetv", logo: "https://logo.m3uassets.com/e.png", group: "KURDISH", url: "https://live20.bozztv.com/giatv/giatv-sozetv/sozetv/chunks.m3u8" },
+            { name: "SADA", logo: "https://logo.m3uassets.com/sadafm.png", group: "KURDISH", url: "http://sada-hd.ddns.net:40/live/sadatv/HawezHD.m3u8" },
+            { name: "Mix SPORT", logo: "https://logo.m3uassets.com/sportmix.png", group: "KURDISH", url: "http://avrstream.com:1935/live/Mix-kurdy/playlist.m3u8" },
+            { name: "rasoulallahtv", logo: "https://logo.m3uassets.com/a.png", group: "KURDISH", url: "http://avrstream.com:1935/live/rasoulallahtv/playlist.m3u8" },
+            { name: "SHAR TV", logo: "https://logo.m3uassets.com/artv.png", group: "KURDISH", url: "http://avrstream.com:1935/live/SHARTV/playlist.m3u8" },
+            { name: "ALA", logo: "https://logo.m3uassets.com/ala.png", group: "KURDISH", url: "http://avrstream.com:1935/live/ala-hd/playlist.m3u8" },
+            { name: "MMN SHOW", logo: "https://logo.m3uassets.com/o.png", group: "KURDISH", url: "http://mmn.mypsx.net:1935/live/mmnhddshow/playlist.m3u8" },
+            { name: "MMN NEWS", logo: "https://logo.m3uassets.com/cnnews.png", group: "KURDISH", url: "http://mmn.mypsx.net:1935/live/mmnhdnews/playlist.m3u8" },
+            { name: "MMN CLIP", logo: "https://logo.m3uassets.com/l.png", group: "KURDISH", url: "http://mmn.mypsx.net:1935/live/mmnhddocumentary/playlist.m3u8" },
+            { name: "MMN ACTION", logo: "https://logo.m3uassets.com/action.png", group: "KURDISH", url: "http://mmn.mypsx.net:1935/live/mmnhdaction/playlist.m3u8" },
+            { name: "MMN KIDS", logo: "https://logo.m3uassets.com/onkids.png", group: "KURDISH", url: "http://mmn.mypsx.net:1935/live/mmnhdkids/playlist.m3u8" },
+            { name: "MMN QURAN", logo: "https://logo.m3uassets.com/quran.png", group: "KURDISH", url: "http://mmn.mypsx.net:1935/live/mmnhdquran/playlist.m3u8" },
+            { name: "MMN SPORT", logo: "https://logo.m3uassets.com/nsport.png", group: "KURDISH", url: "http://mmn.mypsx.net:1935/live/mmnhdsport/playlist.m3u8" },
+            { name: "Barin family HD", logo: "https://logo.m3uassets.com/tringfamily.png", group: "KURDISH", url: "http://baskhd.ddns.net:40/live/BarinfamilyHD/HawezHD.m3u8" },
+            { name: "Bnar HD", logo: "https://logo.m3uassets.com/a.png", group: "KURDISH", url: "http://baskhd.ddns.net:40/live/bnar4k/mono.m3u8" },
+            { name: "AVAR TV", logo: "https://logo.m3uassets.com/tvart.png", group: "KURDISH", url: "http://avrstream.com:1935/live/AvarTv/playlist.m3u8" },
+            { name: "baskhd", logo: "https://logo.m3uassets.com/a.png", group: "KURDISH", url: "http://baskhd.ddns.net:40/live/baskhd/HawezHD.m3u8" },
+            { name: "radiokrd", logo: "https://logo.m3uassets.com/radio.png", group: "KURDISH", url: "https://live20.bozztv.com/giatv/giatv-1019fmradiokrd/1019fmradiokrd/chunks.m3u8" },
+            { name: "WAAR TV", logo: "https://logo.m3uassets.com/waartv.png", group: "KURDISH", url: "https://live.kwikmotion.com/waarmedialive/waarmedia.smil/waarmediapublish/waarmedia_240p/chunks.m3u8" },
+            { name: "DUHOK TV", logo: "https://logo.m3uassets.com/ktv.png", group: "KURDISH", url: "https://derste247liveint.akamaized.net/hls/live/662735/daserste_int/master.m3u8" },
+            { name: "JIN TV", logo: "https://logo.m3uassets.com/jintv.png", group: "KURDISH", url: "https://live.jintv.org/medialive/jintv.m3u8" },
+            { name: "KIDCO", logo: "https://logo.m3uassets.com/id.png", group: "KURDISH", url: "http://avrstream.com:1935/live/kidcohd/playlist.m3u8" },
+            { name: "TRT KURDI", logo: "https://logo.m3uassets.com/trtkurdi.png", group: "KURDISH", url: "https://tv-trtkurdi.medya.trt.com.tr/master_720.m3u8" },
+            { name: "BahraHD", logo: "https://logo.m3uassets.com/a.png", group: "KURDISH", url: "http://51.89.152.180/live/BahraHD/chunks.m3u8" },
+            { name: "SPI TV 4K 2025", logo: "https://logo.m3uassets.com/0.png", group: "Kurdistan", url: "https://live20.bozztv.com/giatv/giatv-spitv4k_kamalblbas/spitv4k_kamalblbas/chunks.m3u8" },
+            { name: "PAYAM TV", logo: "https://logo.m3uassets.com/payamtv.png", group: "Kurdistan", url: "https://media2.streambrothers.com:1936/8218/8218/halabja88.m3u8" },
+            { name: "AVA FAMILY", logo: "https://logo.m3uassets.com/avafamily.png", group: "Kurdistan", url: "https://familyhls.avatv.live/hls/stream.m3u8" },
+            { name: "AVA TV", logo: "https://logo.m3uassets.com/avatv.png", group: "Kurdistan", url: "http://hlspackager.akamaized.net/live/DB/AVA_TV/HLS/AVA_TV-avc1_2500000=10002.m3u8" },
+            { name: "AFARIN HD TV", logo: "https://logo.m3uassets.com/afarintv.png", group: "Kurdistan", url: "https://65f16f0fdfc51.streamlock.net/afarinTV/livestream/playlist.m3u8" },
+            { name: "KHAK TV", logo: "https://logo.m3uassets.com/aktv.png", group: "Kurdistan", url: "http://bblserver.ddns.net:1935/stream/khakhd/playlist.m3u8" },
+            { name: "MED MUZIK TV", logo: "https://logo.m3uassets.com/medmuzik.png", group: "Kurdistan", url: "http://54.36.110.140/live3/live3.m3u8" },
+            { name: "SADA TV", logo: "https://logo.m3uassets.com/sadatv.png", group: "Kurdistan", url: "http://sada-hd.ddns.net:40/live/sadatv/playlist.m3u8" },
+            { name: "DERIN TV", logo: "https://logo.m3uassets.com/e.png", group: "Kurdistan", url: "http://baskhd.ddns.net:40/live/Derin/index.m3u8?checkedby:kurdtv1" },
+            { name: "CHANNEL 8", logo: "https://logo.m3uassets.com/channel8.png", group: "Kurdistan", url: "https://live.channel8.com/Channel8-Kurdish/tracks-v4a1/mono.m3u8" },
+            { name: "CHANNEL 8 FHD", logo: "https://logo.m3uassets.com/channel8.png", group: "Kurdistan", url: "https://live.channel8.com/Channel8-Kurdish/index.fmp4.m3u8" },
+            { name: "GREAT AMERICAN LIVING", logo: "https://logo.m3uassets.com/greatamericanliving.png", group: "Kurdistan", url: "http://hardcoremedia.xyz/live/BG992263/38692743/261528.m3u8" },
+            { name: "LIVING COLOR", logo: "https://logo.m3uassets.com/livingcolor.png", group: "Kurdistan", url: "http://hardcoremedia.xyz/live/BG992263/38692743/251913.m3u8" },
+            { name: "LIVING SINGLE", logo: "https://logo.m3uassets.com/247livingsingle.png", group: "Kurdistan", url: "http://hardcoremedia.xyz/live/BG992263/38692743/251753.m3u8" },
+            { name: "PAYAM ᴴᴰ", logo: "https://logo.m3uassets.com/payamtv.png", group: "Kurdistan", url: "https://media2.streambrothers.com:1936/8218/8218/HawezHD.m3u8" },
+            { name: "AVA MEDIA ᴴᴰ", logo: "https://logo.m3uassets.com/amedia1.png", group: "Kurdistan", url: "https://hawez@iko-streamline-live1.akamaized.net/AVATV/master.m3u8?checkedby:hawezhd" },
+            { name: "DERIN ᴴᴰ", logo: "https://logo.m3uassets.com/e.png", group: "Kurdistan", url: "http://baskhd.ddns.net:40/live/Derin/HawezHD.m3u8" },
+            { name: "QELLAT TV ᴴᴰ", logo: "https://logo.m3uassets.com/qellat.png", group: "Kurdistan", url: "http://213.32.255.86:1935/live/Qellat_tv/hawezhd.m3u8" },
+            { name: "AFARIN ᴴᴰ", logo: "https://logo.m3uassets.com/afarin.png", group: "Kurdistan", url: "http://afarintv.flashmediacast.com:1935/afarinTV/livestream/HawezHD.m3u8" },
+            { name: "AFARIN BAXCHA ᴴᴰ", logo: "https://logo.m3uassets.com/a.png", group: "Kurdistan", url: "http://afarintv2.flashmediacast.com:1935/afarinTV/livestream/hawezhd.m3u8" },
+            { name: "MMN ᴴᴰ", logo: "https://logo.m3uassets.com/mmntv.png", group: "Kurdistan", url: "http://mmn.mypsx.net:1935/live/mmnhddshow/HawezHD.m3u8" },
+            { name: "MMN NEWS ᴴᴰ", logo: "https://logo.m3uassets.com/cnnews.png", group: "Kurdistan", url: "http://mmn.mypsx.net:1935/live/mmnhdnews/HawezHD.m3u8" },
+            { name: "MMN ACTION ᴴᴰ", logo: "https://logo.m3uassets.com/action.png", group: "Kurdistan", url: "http://mmn.mypsx.net:1935/live/mmnhdaction/HawezHD.m3u8" },
+            { name: "MMN DRAMA ᴴᴰ", logo: "https://logo.m3uassets.com/ondrama.png", group: "Kurdistan", url: "http://mmn.mypsx.net:1935/live/mmnhddrama/HawezHD.m3u8" },
+            { name: "MMN DOCUMENTARY ᴴᴰ", logo: "https://logo.m3uassets.com/documentary.png", group: "Kurdistan", url: "http://mmn.mypsx.net:1935/live/mmnhddocumentary/HawezHD.m3u8" },
+            { name: "WELAT ᴴᴰ", logo: "https://logo.m3uassets.com/elat.png", group: "Kurdistan", url: "http://stream.welattv.net:1935/welat/tv/playlist.m3u8" },
+            { name: "KNN", logo: "https://logo.m3uassets.com/knn.png", group: "Kurdistan", url: "https://cloudstreamthdn.tek4tv.vn/live/smil:daknong.smil/playlist.m3u8" },
+            { name: "NICK HD C", logo: "https://logo.m3uassets.com/nickch.png", group: "KBHS : KIDS TV", url: "http://blackheaven-iptv.com:8080/live/kEFZJgy1taEmtax/bP4XwgejntJmADm/195290.m3u8" },
+            { name: "SUPER RTL HD S", logo: "https://logo.m3uassets.com/rtlsuper.png", group: "KBHS : KIDS TV", url: "http://blackheaven-iptv.com:8080/live/kEFZJgy1taEmtax/bP4XwgejntJmADm/18684.m3u8" },
+            { name: "TOM UND JERRY", logo: "https://logo.m3uassets.com/tomandjerry.png", group: "KBHS : KIDS TV", url: "http://blackheaven-iptv.com:8080/live/kEFZJgy1taEmtax/bP4XwgejntJmADm/631423.m3u8" },
+            { name: "TEEN TITANS GO HD", logo: "https://logo.m3uassets.com/teentitansgochannel.png", group: "KBHS : KIDS TV", url: "http://blackheaven-iptv.com:8080/live/kEFZJgy1taEmtax/bP4XwgejntJmADm/381696.m3u8" },
+            { name: "AFARINKIDS", logo: "https://logo.m3uassets.com/afarin.png", group: "KBHS : KIDS TV", url: "http://afarintv.flashmediacast.com:1935/afarinTV/livestream/chunklist_w1505309502.m3u8?nimblesessionid=574377&amp%2525252525253B" },
+            { name: "WIFE AND KIDS", logo: "https://logo.m3uassets.com/mywifeandkids.png", group: "KBHS : KIDS TV", url: "http://hardcoremedia.xyz/live/BG992263/38692743/251942.m3u8" },
+            { name: "NICK JR WEST", logo: "https://logo.m3uassets.com/nickjrwest.png", group: "KBHS : KIDS TV", url: "http://hardcoremedia.xyz/live/BG992263/38692743/137685.m3u8" },
+            { name: "TEEN NICK", logo: "https://logo.m3uassets.com/teennick.png", group: "KBHS : KIDS TV", url: "http://hardcoremedia.xyz/live/BG992263/38692743/137688.m3u8" },
+            { name: "KIDSFLIX", logo: "https://logo.m3uassets.com/kidsflix.png", group: "KBHS : KIDS TV", url: "http://hardcoremedia.xyz/live/BG992263/38692743/7487.m3u8" },
+            { name: "GALI KURDISTAN TV", logo: "https://logo.m3uassets.com/galikurdistantv.png", group: "KU : KURDISTAN", url: "https://live.host247.net/gk/gksat/playlist.m3u8" },
+            { name: "4KURD", logo: "https://logo.m3uassets.com/urd.png", group: "KU : KURDISTAN", url: "https://4kuhls.persiana.live/hls/stream.m3u8" },
+            { name: "KURDISTAN24", logo: "https://logo.m3uassets.com/kurdistan24.png", group: "KU : KURDISTAN", url: "https://d1x82nydcxndze.cloudfront.net/live/index_720p25.m3u8" },
+            { name: "KURDSAT", logo: "https://logo.m3uassets.com/kurdsat.png", group: "KU : KURDISTAN", url: "http://hlspackager.akamaized.net/live/DB/KURDSAT_HD/HLS/KURDSAT_HD-mp4a_128000_eng=20000.m3u8" },
+            { name: "KURDSAT NEWS", logo: "https://logo.m3uassets.com/kurdsatnews.png", group: "KU : KURDISTAN", url: "https://hlspackager.akamaized.net/live/DB/KURDSAT_NEWS/HLS/KURDSAT_NEWS-mp4a_128000_eng=20000.m3u8" },
+            { name: "GALI KURDISATN", logo: "https://logo.m3uassets.com/galikurdistan.png", group: "KU : KURDISTAN", url: "https://live.host247.net/gk/gksat/chunklist_w1358946070.m3u8" },
+            { name: "KURDISTAN24 TV", logo: "https://logo.m3uassets.com/kurdistan24.png", group: "KU : KURDISTAN", url: "https://d1x82nydcxndze.cloudfront.net/live/index_240p25.m3u8" },
+            { name: "KURDSAT NEWS", logo: "https://logo.m3uassets.com/kurdsatnews.png", group: "KU : KURDISTAN", url: "http://hlspackager.akamaized.net/live/DB/KURDSAT_NEWS/HLS/KURDSAT_NEWS-avc1_400000=10000.m3u8" },
+            { name: "KURDSAT", logo: "https://logo.m3uassets.com/kurdsat.png", group: "KU : KURDISTAN", url: "https://iko-live.akamaized.net/KurdsatTV/master_2.m3u8" },
+            { name: "KURDISTAN 24 ᴴᴰ", logo: "https://logo.m3uassets.com/kurdistan24.png", group: "KU : KURDISTAN", url: "https://hawezhd@d1x82nydcxndze.cloudfront.net/live/index_720p25.m3u8" },
+            { name: "KURD CHANNEL ᴴᴰ", logo: "https://logo.m3uassets.com/kurdchannel.png", group: "KU : KURDISTAN", url: "https://iko-live.akamaized.net/kurdhd/master.m3u8" },
+            { name: "test 1", logo: "https://logo.m3uassets.com/test.png", group: "Kurdish Radio", url: "http://a8.asurahosting.com:7850/radio.mp3" },
+            { name: "spi_quran_hd", logo: "https://logo.m3uassets.com/quran.png", group: "🇮🇶 Kurdistan", url: "https://live20.bozztv.com/giatv/giatv-spi_quran_hd/spi_quran_hd/chunks.m3u8" },
+            { name: "MMN Quran ᴴᴰ", logo: "https://logo.m3uassets.com/quran.png", group: "🇮🇶 Kurdistan", url: "http://mmn.mypsx.net:1935/live/mmnhdquran/HawezHD.m3u8" },
+            { name: "KURDSAT", logo: "https://logo.m3uassets.com/kurdsat.png", group: "🇹🇳 kurdistan", url: "https://iko-live.akamaized.net/KurdsatTV/master_1.m3u8" },
+            { name: "MMN kids", logo: "https://logo.m3uassets.com/onkids.png", group: "KIDS : KURDI_ARABIC", url: "http://mmn.mypsx.net:1935/live/mmnhdkids/HawezHD.m3u8" },
+            { name: "Balapan TV", logo: "https://logo.m3uassets.com/balapan.png", group: "kids hd", url: "https://balapantv-stream.qazcdn.com/balapantv/balapantv/playlist.m3u8" },
+            { name: "EBS kids", logo: "https://logo.m3uassets.com/ebskids.png", group: "kids hd", url: "http://ebsonair.ebs.co.kr/ebsufamilypc/familypc1m/playlist.m3u8" },
+            { name: "Kids1", logo: "https://logo.m3uassets.com/kids1.png", group: "kids hd", url: "https://stream.ads.ottera.tv/playlist.m3u8?network_id=33" },
+            { name: "Kids2", logo: "https://logo.m3uassets.com/kids2.png", group: "kids hd", url: "https://stream.ads.ottera.tv/playlist.m3u8?network_id=34" },
+            { name: "Kids3", logo: "https://logo.m3uassets.com/kids3.png", group: "kids hd", url: "https://stream.ads.ottera.tv/playlist.m3u8?network_id=35" },
+            { name: "Kids4", logo: "https://logo.m3uassets.com/kids.png", group: "kids hd", url: "https://stream.ads.ottera.tv/playlist.m3u8?network_id=36" },
+            { name: "Kids5", logo: "https://logo.m3uassets.com/kids5.png", group: "kids hd", url: "https://stream.ads.ottera.tv/playlist.m3u8?network_id=37" },
+            { name: "Kids6", logo: "https://logo.m3uassets.com/kids.png", group: "kids hd", url: "https://stream-us-east-1.getpublica.com/playlist.m3u8?network_id=225" },
+            { name: "Kids7", logo: "https://logo.m3uassets.com/kids.png", group: "kids hd", url: "https://stream.ads.ottera.tv/playlist.m3u8?network_id=2613" },
+            { name: "MBC3 HD", logo: "https://logo.m3uassets.com/mbc3.png", group: "kids hd", url: "https://mbcbollywood-prod-dub-enc.edgenextcdn.net/out/v1/d5bbe570e1514d3d9a142657d33d85e6/index.m3u8" },
+            { name: "MBC3 USA HD", logo: "https://logo.m3uassets.com/mbc3.png", group: "kids hd", url: "https://mbc-3-usa-enc.edgenextcdn.net/out/v1/8bbfec9446d84c9ea0dfa34edede6db9/index.m3u8" },
+            { name: "Moonbug Kids", logo: "https://logo.m3uassets.com/moonbugkids.png", group: "kids hd", url: "https://moonbug-rokuus.amagi.tv/playlist.m3u8" },
+            { name: "PBS KIDS", logo: "https://logo.m3uassets.com/pbskids.png", group: "kids hd", url: "https://2-fss-2.streamhoster.com/pl_140/amlst:200914-1298290/playlist.m3u8?DVR" },
+            { name: "Ryan and Friends", logo: "https://logo.m3uassets.com/ryanandfriends.png", group: "kids hd", url: "https://ryanandfriends-samsungau.amagi.tv/playlist.m3u8" },
+            { name: "Spacetoon", logo: "https://logo.m3uassets.com/spacetoon.png", group: "kids hd", url: "https://spacetoon-prod-dub-enc.edgenextcdn.net/out/v1/6240b773a3f34cca95d119f9e76aec02/index.m3u8" },
+            { name: "Zoo Moo", logo: "https://logo.m3uassets.com/zoomoo.png", group: "kids hd", url: "https://zoomoo-samsungau.amagi.tv/playlist.m3u8" },
+            { name: "ZooMoo HD", logo: "https://logo.m3uassets.com/zoomoo.png", group: "kids hd", url: "https://zoomoo-samsungau.amagi.tv/playlist1080p.m3u8" },
+            { name: "TVE", logo: "https://logo.m3uassets.com/tve.png", group: "kids hd", url: "http://streaming.procergs.com.br:1935/tve/stve/chunklist.m3u8" },
+            { name: "Toon Goggles", logo: "https://logo.m3uassets.com/toongoggles.png", group: "kids hd", url: "https://stream-us-east-1.getpublica.com/playlist.m3u8?network_id=514" },
+            { name: "Tv Escolaᴴᴰ", logo: "https://logo.m3uassets.com/tvescola.png", group: "kids hd", url: "https://5c483b9d1019c.streamlock.net/8054/8054/chunklist.m3u8" },
+            { name: "ZooMoo", logo: "https://logo.m3uassets.com/zoomoo.png", group: "kids hd", url: "https://stream-us-east-1.getpublica.com/playlist.m3u8?network_id=60" },
+            { name: "TG Junior Kids", logo: "https://logo.m3uassets.com/tgjunior.png", group: "kids hd", url: "https://stream-us-east-1.getpublica.com/playlist.m3u8?network_id=31" },
+            { name: "Amou Yazid TV", logo: "https://logo.m3uassets.com/amouyazidtv.png", group: "kids hd", url: "http://mkstream.servehttp.com:1940/AmouYazid/ay1/chunklist.m3u8" },
+            { name: "Mr.Bean [ʀᴀκυᴛᴇɴ]", logo: "https://logo.m3uassets.com/mrbean.png", group: "kids hd", url: "https://amg00627-amg00627c30-rakuten-es-3990.playouts.now.amagi.tv/playlist/amg00627-banijayfast-mrbeanescc-rakutenes/playlist.m3u8" },
+            { name: "Léo e Lully", logo: "https://logo.m3uassets.com/e.png", group: "kids hd", url: "https://cdn-3.nxplay.com.br/LEO_E_LULLY/tracks-v1a1/mono.m3u8" },
+            { name: "TVG Xabarin", logo: "https://logo.m3uassets.com/a.png", group: "kids hd", url: "https://crtvg-infantil-schlive.flumotion.cloud/crtvglive/smil:channel5PRG.smil/playlist.m3u8" },
+            { name: "Barbie and Friends", logo: "https://logo.m3uassets.com/a.png", group: "kids hd", url: "https://d1xqdnwy1bo05f.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-jh1ol665g3amg/barb.m3u8" },
+            { name: "BBC Kids", logo: "https://logo.m3uassets.com/bbckids.png", group: "kids hd", url: "https://d26xbpvvy0tj0m.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-2ym2cgz6gmgem/playlist.m3u8" },
+            { name: "Duck tv", logo: "https://logo.m3uassets.com/ducktv.png", group: "kids hd", url: "https://dlir9brl2ge8j.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-9u2v4ro40jww6-ssai-prd/playlist.m3u8" },
+            { name: "Garfield and Friends", logo: "https://logo.m3uassets.com/garfieldandfriends.png", group: "kids hd", url: "https://is.gd/KGxtX7?60faf9ddfcc1f200070a5932.m3u8" },
+            { name: "Lego Kids", logo: "https://logo.m3uassets.com/legokidstv.png", group: "kids hd", url: "https://is.gd/TH0DFt?legKids.m3u8" },
+            { name: "Smurf tv", logo: "https://logo.m3uassets.com/surftv.png", group: "kids hd", url: "https://is.gd/V0cHd5?profile=GBBD1300001WA.m3u8" },
+            { name: "ROTANA_KIDS", logo: "https://logo.m3uassets.com/rotanakids.png", group: "kids hd", url: "https://playlist.fasttvcdn.com/pl/ptllxjd03j6g9oxxjdfapg/roya-kids/playlist.m3u8" },
+            { name: "Spacetoon", logo: "https://logo.m3uassets.com/spacetoon.png", group: "kids hd", url: "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-spacetoon/d8382fb9ab4b2307058f12c7ea90db54/index.m3u8" },
+            { name: "Xtrema Cartoons", logo: "https://logo.m3uassets.com/xtremacartoons.png", group: "kids hd", url: "https://stmv6.voxtvhd.com.br/xtremacartoons/xtremacartoons/playlist.m3u8" },
+            { name: "Camp Spoopy", logo: "https://logo.m3uassets.com/campspoopy.png", group: "kids hd", url: "https://stream.ads.ottera.tv/playlist.m3u8?network_id=269" },
+            { name: "Duck tv", logo: "https://logo.m3uassets.com/ducktv.png", group: "kids hd", url: "https://stream.ads.ottera.tv/playlist.m3u8?network_id=7617" },
+            { name: "Toon Goggles", logo: "https://logo.m3uassets.com/toongoggles.png", group: "kids hd", url: "https://tg-tg-br-samsung.otteravision.com/tg/tg_br_h265/tg_br_h265.m3u8" },
+            { name: "kuriakos kids", logo: "https://logo.m3uassets.com/kuriakoskids.png", group: "kids hd", url: "https://w2.manasat.com/kkids/smil:kkids.smil/playlist.m3u8" },
+            { name: "Clan", logo: "https://logo.m3uassets.com/clan.png", group: "kids hd", url: "https://ztnr.rtve.es/ztnr/5466990.m3u8" },
+            { name: "AfarinKids", logo: "https://logo.m3uassets.com/afarin.png", group: "🧒 Kids & Cartoons", url: "http://afarintv.flashmediacast.com:1935/afarinTV/livestream/chunklist_w1505309502.m3u8?nimblesessionid=574377&amp%252525253B" },
+            { name: "CARTOON NETWORK", logo: "https://logo.m3uassets.com/cartoonnetwork.png", group: "🧒 Kids & Cartoons", url: "http://45.5.117.57:8999/play/a05p/index.m3u8" },
+            { name: "24", logo: "https://logo.m3uassets.com/24.png", group: "gshty tv", url: "http://static.france24.com/live/F24_EN_LO_HLS/live_web.m3u8" },
+            { name: "Mihrab FM ᴴᴰ", logo: "https://logo.m3uassets.com/a.png", group: "gshty tv", url: "http://bblserver.ddns.net:1935/live/mihrabfm/HawezHD.m3u8" },
+            { name: "MMN ᴴᴰ", logo: "https://logo.m3uassets.com/mmntv.png", group: "gshty tv", url: "http://mmn.mypsx.net:1935/live/mmnhdradioturky/HawezHD.m3u8" },
+            { name: "Bnar ᴴᴰ", logo: "https://logo.m3uassets.com/a.png", group: "gshty tv", url: "http://baskhd.ddns.net:40/live/bnar4k/HawezHD.m3u8" },
+            { name: "Ranya City ᴴD", logo: "https://logo.m3uassets.com/a.png", group: "gshty tv", url: "https://avr.host247.net/Ranya/RanyaCity/playlist.m3u8" },
+            { name: "Hà Nội 1", logo: "https://logo.m3uassets.com/1.png", group: "gshty tv", url: "https://cloudstreamhntv.tek4tv.vn/capture/smil:HN1.smil/playlist.m3u8" },
+            { name: "Hà Nội 2", logo: "https://logo.m3uassets.com/2.png", group: "gshty tv", url: "https://cloudstreamhntv.tek4tv.vn/live/smil:HN2.smil/playlist.m3u8" },
+            { name: "Kiên Giang 1", logo: "https://logo.m3uassets.com/1.png", group: "gshty tv", url: "http://tv.kgtv.vn/live/kgtv1/kgtv1.m3u8" },
+            { name: "Nghệ An", logo: "https://logo.m3uassets.com/ebnghana.png", group: "gshty tv", url: "https://live.truyenhinhnghean.vn/hls/na1/index.m3u8" },
+            { name: "Quảng Ninh 1", logo: "https://logo.m3uassets.com/1.png", group: "gshty tv", url: "http://103.90.220.236/qtvlive/tv1live.m3u8" },
+            { name: "Quảng Ninh 3", logo: "https://logo.m3uassets.com/3.png", group: "gshty tv", url: "http://103.90.220.236/qtvlive/tv3live.m3u8" }
+        ];
 
-<script>
-    // ==================== 161+ کەناڵەکان ====================
-    const allChannels = [
-        { name: "ESRA TV 1", logo: "https://logo.m3uassets.com/pesrayatv.png", group: "KURDISH", url: "https://live20.bozztv.com/giatv/giatv-ESRAHD/ESRAHD/chunks.m3u8" },
-        { name: "ESRA TV 2", logo: "https://logo.m3uassets.com/pesrayatv.png", group: "KURDISH", url: "https://live20.bozztv.com/giatv/giatv-esra2hd_kamalblbas/esra2hd_kamalblbas/chunks.m3u8" },
-        { name: "spi kids 4k", logo: "https://logo.m3uassets.com/id.png", group: "KURDISH", url: "https://live20.bozztv.com/giatv/giatv-spikids4k2025/spikids4k2025/chunks.m3u8" },
-        { name: "کەناڵی ئامۆژگاری", logo: "https://amozhgary.tv/style/img/logo.png", group: "KURDISH", url: "https://app-live.org/live/3268334b/index.m3u8" },
-        { name: "ئەکادیمیای ئامۆژگاری", logo: "https://amozhgary.tv/style/img/academy_logo.png", group: "KURDISH", url: "https://app-live.org/live/a267c1b3/index.m3u8" },
-        { name: "Rawshan hd", logo: "https://logo.m3uassets.com/shanxi.png", group: "KURDISH", url: "http://rawshan.ddns.net:1935/live/rawshantv/playlist.m3u8" },
-        { name: "BARIN QURAN", logo: "https://logo.m3uassets.com/bahrainquran.png", group: "KURDISH", url: "http://baskhd.ddns.net:40/live/QURANHDTV/HawezHD.m3u8" },
-        { name: "EMAN", logo: "https://logo.m3uassets.com/a.png", group: "KURDISH", url: "http://avrstream.com:1935/live/emantv/playlist.m3u8" },
-        { name: "NaqshiMedia", logo: "https://logo.m3uassets.com/a.png", group: "KURDISH", url: "http://naqshi-media.com:1935/live/NaqshiMedia/playlist.m3u8" },
-        { name: "AVA TV HD", logo: "https://logo.m3uassets.com/avatv.png", group: "KURDISH", url: "http://hlspackager.akamaized.net/live/DB/AVA_TV/HLS/AVA_TV.m3u8" },
-        { name: "K24 FHD", logo: "https://logo.m3uassets.com/k24.png", group: "KURDISH", url: "https://d1x82nydcxndze.cloudfront.net/live/index.m3u8" },
-        { name: "Channel 8 HD", logo: "https://logo.m3uassets.com/channel8.png", group: "KURDISH", url: "https://live.channel8.com/Channel8-Kurdish/index.m3u8" },
-        { name: "KURDSAT", logo: "https://logo.m3uassets.com/kurdsat.png", group: "KURDISH", url: "https://hlspackager.akamaized.net/live/DB/KURDSAT_HD/HLS/KURDSAT_HD.m3u8" },
-        { name: "KURDSAT NEWS", logo: "https://logo.m3uassets.com/kurdsatnews.png", group: "KURDISH", url: "https://hlspackager.akamaized.net/live/DB/KURDSAT_NEWS/HLS/KURDSAT_NEWS.m3u8" },
-        { name: "Soran Entertainment", logo: "https://logo.m3uassets.com/ransentertainment.png", group: "KURDISH", url: "http://avrstream.com:1935/live/SoranEntertainment/playlist.m3u8" },
-        { name: "shnatv", logo: "https://logo.m3uassets.com/natv.png", group: "KURDISH", url: "http://shnatv.ddns.net:1935/live/shnatv/playlist.m3u8" },
-        { name: "ZAGROS TV", logo: "https://logo.m3uassets.com/zagrostv.png", group: "KURDISH", url: "https://5a3ed7a72ed4b.streamlock.net/zagrostv/SMIL:myStream.smil/chunklist_w469474030_b1700000_sleng_t64MTA4MHA=.m3u8" },
-        { name: "KHAK TV", logo: "https://logo.m3uassets.com/aktv.png", group: "KURDISH", url: "http://bblserver.ddns.net:1935/stream/khakhd/hawezhd.m3u8" },
-        { name: "zaroktv", logo: "https://logo.m3uassets.com/zaroktv.png", group: "KURDISH", url: "https://zindikurmanci.zaroktv.com.tr/hls/0/stream.m3u8" },
-        { name: "Pro TV Quran", logo: "https://logo.m3uassets.com/a.png", group: "KURDISH", url: "http://tv.ezanvaktipro.com/hls/quran.m3u8" },
-        { name: "ISHTAR TV", logo: "https://logo.m3uassets.com/ishtartv.png", group: "KURDISH", url: "http://ishtartv.badinan.xyz:1935/live/iShtarHD/playlist.m3u8" },
-        { name: "Minara FM", logo: "https://logo.m3uassets.com/minara.png", group: "KURDISH", url: "http://bblserver.ddns.net:1935/live/mihrabfm/playlist.m3u8" },
-        { name: "graryantv", logo: "https://logo.m3uassets.com/grantv.png", group: "KURDISH", url: "https://live20.bozztv.com/giatv/giatv-halabja88garyan/halabja88garyan/chunks.m3u8" },
-        { name: "PAYAM TV", logo: "https://logo.m3uassets.com/payamtv.png", group: "KURDISH", url: "https://media2.streambrothers.com:1936/8218/8218/kurdtv1.m3u8" },
-        { name: "AFRIN TV FHD", logo: "https://logo.m3uassets.com/afarintv.png", group: "KURDISH", url: "http://afarintv.flashmediacast.com:1935/afarinTV/livestream/playlist.m3u8" },
-        { name: "AFRIN باخچە", logo: "https://logo.m3uassets.com/a.png", group: "KURDISH", url: "http://afarintv2.flashmediacast.com:1935/afarinTV/livestream/playlist.m3u8" },
-        { name: "AFRIN KIDS", logo: "https://logo.m3uassets.com/pinkids.png", group: "KURDISH", url: "http://afarintv2.flashmediacast.com:1935/afarinTV/d1/livestream/HawezHD.m3u8" },
-        { name: "Kirkuk TV", logo: "https://logo.m3uassets.com/kirkuktv.png", group: "KURDISH", url: "https://live.kirkuklive.live/hls/stream/index.m3u8" },
-        { name: "BAHA ENTERTAINMENT", logo: "https://logo.m3uassets.com/entertainment.png", group: "KURDISH", url: "http://baskhd.ddns.net:40/live/baskhd/yusfstore.m3u8" },
-        { name: "SOZ QURAN", logo: "https://logo.m3uassets.com/quran.png", group: "KURDISH", url: "http://live20.bozztv.com/giatv/giatv-sozquran/sozquran/chunks.m3u8" },
-        { name: "sozetv", logo: "https://logo.m3uassets.com/e.png", group: "KURDISH", url: "https://live20.bozztv.com/giatv/giatv-sozetv/sozetv/chunks.m3u8" },
-        { name: "SADA", logo: "https://logo.m3uassets.com/sadafm.png", group: "KURDISH", url: "http://sada-hd.ddns.net:40/live/sadatv/HawezHD.m3u8" },
-        { name: "Mix SPORT", logo: "https://logo.m3uassets.com/sportmix.png", group: "KURDISH", url: "http://avrstream.com:1935/live/Mix-kurdy/playlist.m3u8" },
-        { name: "rasoulallahtv", logo: "https://logo.m3uassets.com/a.png", group: "KURDISH", url: "http://avrstream.com:1935/live/rasoulallahtv/playlist.m3u8" },
-        { name: "SHAR TV", logo: "https://logo.m3uassets.com/artv.png", group: "KURDISH", url: "http://avrstream.com:1935/live/SHARTV/playlist.m3u8" },
-        { name: "ALA", logo: "https://logo.m3uassets.com/ala.png", group: "KURDISH", url: "http://avrstream.com:1935/live/ala-hd/playlist.m3u8" },
-        { name: "MMN SHOW", logo: "https://logo.m3uassets.com/o.png", group: "KURDISH", url: "http://mmn.mypsx.net:1935/live/mmnhddshow/playlist.m3u8" },
-        { name: "MMN NEWS", logo: "https://logo.m3uassets.com/cnnews.png", group: "KURDISH", url: "http://mmn.mypsx.net:1935/live/mmnhdnews/playlist.m3u8" },
-        { name: "MMN CLIP", logo: "https://logo.m3uassets.com/l.png", group: "KURDISH", url: "http://mmn.mypsx.net:1935/live/mmnhddocumentary/playlist.m3u8" },
-        { name: "MMN ACTION", logo: "https://logo.m3uassets.com/action.png", group: "KURDISH", url: "http://mmn.mypsx.net:1935/live/mmnhdaction/playlist.m3u8" },
-        { name: "MMN KIDS", logo: "https://logo.m3uassets.com/onkids.png", group: "KURDISH", url: "http://mmn.mypsx.net:1935/live/mmnhdkids/playlist.m3u8" },
-        { name: "MMN QURAN", logo: "https://logo.m3uassets.com/quran.png", group: "KURDISH", url: "http://mmn.mypsx.net:1935/live/mmnhdquran/playlist.m3u8" },
-        { name: "MMN SPORT", logo: "https://logo.m3uassets.com/nsport.png", group: "KURDISH", url: "http://mmn.mypsx.net:1935/live/mmnhdsport/playlist.m3u8" },
-        { name: "Barin family HD", logo: "https://logo.m3uassets.com/tringfamily.png", group: "KURDISH", url: "http://baskhd.ddns.net:40/live/BarinfamilyHD/HawezHD.m3u8" },
-        { name: "Bnar HD", logo: "https://logo.m3uassets.com/a.png", group: "KURDISH", url: "http://baskhd.ddns.net:40/live/bnar4k/mono.m3u8" },
-        { name: "AVAR TV", logo: "https://logo.m3uassets.com/tvart.png", group: "KURDISH", url: "http://avrstream.com:1935/live/AvarTv/playlist.m3u8" },
-        { name: "baskhd", logo: "https://logo.m3uassets.com/a.png", group: "KURDISH", url: "http://baskhd.ddns.net:40/live/baskhd/HawezHD.m3u8" },
-        { name: "radiokrd", logo: "https://logo.m3uassets.com/radio.png", group: "KURDISH", url: "https://live20.bozztv.com/giatv/giatv-1019fmradiokrd/1019fmradiokrd/chunks.m3u8" },
-        { name: "WAAR TV", logo: "https://logo.m3uassets.com/waartv.png", group: "KURDISH", url: "https://live.kwikmotion.com/waarmedialive/waarmedia.smil/waarmediapublish/waarmedia_240p/chunks.m3u8" },
-        { name: "DUHOK TV", logo: "https://logo.m3uassets.com/ktv.png", group: "KURDISH", url: "https://derste247liveint.akamaized.net/hls/live/662735/daserste_int/master.m3u8" },
-        { name: "JIN TV", logo: "https://logo.m3uassets.com/jintv.png", group: "KURDISH", url: "https://live.jintv.org/medialive/jintv.m3u8" },
-        { name: "KIDCO", logo: "https://logo.m3uassets.com/id.png", group: "KURDISH", url: "http://avrstream.com:1935/live/kidcohd/playlist.m3u8" },
-        { name: "TRT KURDI", logo: "https://logo.m3uassets.com/trtkurdi.png", group: "KURDISH", url: "https://tv-trtkurdi.medya.trt.com.tr/master_720.m3u8" },
-        { name: "BahraHD", logo: "https://logo.m3uassets.com/a.png", group: "KURDISH", url: "http://51.89.152.180/live/BahraHD/chunks.m3u8" },
-        { name: "SPI TV 4K 2025", logo: "https://logo.m3uassets.com/0.png", group: "Kurdistan", url: "https://live20.bozztv.com/giatv/giatv-spitv4k_kamalblbas/spitv4k_kamalblbas/chunks.m3u8" },
-        { name: "PAYAM TV", logo: "https://logo.m3uassets.com/payamtv.png", group: "Kurdistan", url: "https://media2.streambrothers.com:1936/8218/8218/halabja88.m3u8" },
-        { name: "AVA FAMILY", logo: "https://logo.m3uassets.com/avafamily.png", group: "Kurdistan", url: "https://familyhls.avatv.live/hls/stream.m3u8" },
-        { name: "AVA TV", logo: "https://logo.m3uassets.com/avatv.png", group: "Kurdistan", url: "http://hlspackager.akamaized.net/live/DB/AVA_TV/HLS/AVA_TV-avc1_2500000=10002.m3u8" },
-        { name: "AFARIN HD TV", logo: "https://logo.m3uassets.com/afarintv.png", group: "Kurdistan", url: "https://65f16f0fdfc51.streamlock.net/afarinTV/livestream/playlist.m3u8" },
-        { name: "KHAK TV", logo: "https://logo.m3uassets.com/aktv.png", group: "Kurdistan", url: "http://bblserver.ddns.net:1935/stream/khakhd/playlist.m3u8" },
-        { name: "MED MUZIK TV", logo: "https://logo.m3uassets.com/medmuzik.png", group: "Kurdistan", url: "http://54.36.110.140/live3/live3.m3u8" },
-        { name: "SADA TV", logo: "https://logo.m3uassets.com/sadatv.png", group: "Kurdistan", url: "http://sada-hd.ddns.net:40/live/sadatv/playlist.m3u8" },
-        { name: "DERIN TV", logo: "https://logo.m3uassets.com/e.png", group: "Kurdistan", url: "http://baskhd.ddns.net:40/live/Derin/index.m3u8?checkedby:kurdtv1" },
-        { name: "CHANNEL 8", logo: "https://logo.m3uassets.com/channel8.png", group: "Kurdistan", url: "https://live.channel8.com/Channel8-Kurdish/tracks-v4a1/mono.m3u8" },
-        { name: "CHANNEL 8 FHD", logo: "https://logo.m3uassets.com/channel8.png", group: "Kurdistan", url: "https://live.channel8.com/Channel8-Kurdish/index.fmp4.m3u8" },
-        { name: "GREAT AMERICAN LIVING", logo: "https://logo.m3uassets.com/greatamericanliving.png", group: "Kurdistan", url: "http://hardcoremedia.xyz/live/BG992263/38692743/261528.m3u8" },
-        { name: "LIVING COLOR", logo: "https://logo.m3uassets.com/livingcolor.png", group: "Kurdistan", url: "http://hardcoremedia.xyz/live/BG992263/38692743/251913.m3u8" },
-        { name: "LIVING SINGLE", logo: "https://logo.m3uassets.com/247livingsingle.png", group: "Kurdistan", url: "http://hardcoremedia.xyz/live/BG992263/38692743/251753.m3u8" },
-        { name: "PAYAM ᴴᴰ", logo: "https://logo.m3uassets.com/payamtv.png", group: "Kurdistan", url: "https://media2.streambrothers.com:1936/8218/8218/HawezHD.m3u8" },
-        { name: "AVA MEDIA ᴴᴰ", logo: "https://logo.m3uassets.com/amedia1.png", group: "Kurdistan", url: "https://hawez@iko-streamline-live1.akamaized.net/AVATV/master.m3u8?checkedby:hawezhd" },
-        { name: "DERIN ᴴᴰ", logo: "https://logo.m3uassets.com/e.png", group: "Kurdistan", url: "http://baskhd.ddns.net:40/live/Derin/HawezHD.m3u8" },
-        { name: "QELLAT TV ᴴᴰ", logo: "https://logo.m3uassets.com/qellat.png", group: "Kurdistan", url: "http://213.32.255.86:1935/live/Qellat_tv/hawezhd.m3u8" },
-        { name: "AFARIN ᴴᴰ", logo: "https://logo.m3uassets.com/afarin.png", group: "Kurdistan", url: "http://afarintv.flashmediacast.com:1935/afarinTV/livestream/HawezHD.m3u8" },
-        { name: "AFARIN BAXCHA ᴴᴰ", logo: "https://logo.m3uassets.com/a.png", group: "Kurdistan", url: "http://afarintv2.flashmediacast.com:1935/afarinTV/livestream/hawezhd.m3u8" },
-        { name: "MMN ᴴᴰ", logo: "https://logo.m3uassets.com/mmntv.png", group: "Kurdistan", url: "http://mmn.mypsx.net:1935/live/mmnhddshow/HawezHD.m3u8" },
-        { name: "MMN NEWS ᴴᴰ", logo: "https://logo.m3uassets.com/cnnews.png", group: "Kurdistan", url: "http://mmn.mypsx.net:1935/live/mmnhdnews/HawezHD.m3u8" },
-        { name: "MMN ACTION ᴴᴰ", logo: "https://logo.m3uassets.com/action.png", group: "Kurdistan", url: "http://mmn.mypsx.net:1935/live/mmnhdaction/HawezHD.m3u8" },
-        { name: "MMN DRAMA ᴴᴰ", logo: "https://logo.m3uassets.com/ondrama.png", group: "Kurdistan", url: "http://mmn.mypsx.net:1935/live/mmnhddrama/HawezHD.m3u8" },
-        { name: "MMN DOCUMENTARY ᴴᴰ", logo: "https://logo.m3uassets.com/documentary.png", group: "Kurdistan", url: "http://mmn.mypsx.net:1935/live/mmnhddocumentary/HawezHD.m3u8" },
-        { name: "WELAT ᴴᴰ", logo: "https://logo.m3uassets.com/elat.png", group: "Kurdistan", url: "http://stream.welattv.net:1935/welat/tv/playlist.m3u8" },
-        { name: "KNN", logo: "https://logo.m3uassets.com/knn.png", group: "Kurdistan", url: "https://cloudstreamthdn.tek4tv.vn/live/smil:daknong.smil/playlist.m3u8" },
-        { name: "NICK HD C", logo: "https://logo.m3uassets.com/nickch.png", group: "KBHS : KIDS TV", url: "http://blackheaven-iptv.com:8080/live/kEFZJgy1taEmtax/bP4XwgejntJmADm/195290.m3u8" },
-        { name: "SUPER RTL HD S", logo: "https://logo.m3uassets.com/rtlsuper.png", group: "KBHS : KIDS TV", url: "http://blackheaven-iptv.com:8080/live/kEFZJgy1taEmtax/bP4XwgejntJmADm/18684.m3u8" },
-        { name: "TOM UND JERRY", logo: "https://logo.m3uassets.com/tomandjerry.png", group: "KBHS : KIDS TV", url: "http://blackheaven-iptv.com:8080/live/kEFZJgy1taEmtax/bP4XwgejntJmADm/631423.m3u8" },
-        { name: "TEEN TITANS GO HD", logo: "https://logo.m3uassets.com/teentitansgochannel.png", group: "KBHS : KIDS TV", url: "http://blackheaven-iptv.com:8080/live/kEFZJgy1taEmtax/bP4XwgejntJmADm/381696.m3u8" },
-        { name: "AFARINKIDS", logo: "https://logo.m3uassets.com/afarin.png", group: "KBHS : KIDS TV", url: "http://afarintv.flashmediacast.com:1935/afarinTV/livestream/chunklist_w1505309502.m3u8?nimblesessionid=574377&amp%2525252525253B" },
-        { name: "WIFE AND KIDS", logo: "https://logo.m3uassets.com/mywifeandkids.png", group: "KBHS : KIDS TV", url: "http://hardcoremedia.xyz/live/BG992263/38692743/251942.m3u8" },
-        { name: "NICK JR WEST", logo: "https://logo.m3uassets.com/nickjrwest.png", group: "KBHS : KIDS TV", url: "http://hardcoremedia.xyz/live/BG992263/38692743/137685.m3u8" },
-        { name: "TEEN NICK", logo: "https://logo.m3uassets.com/teennick.png", group: "KBHS : KIDS TV", url: "http://hardcoremedia.xyz/live/BG992263/38692743/137688.m3u8" },
-        { name: "KIDSFLIX", logo: "https://logo.m3uassets.com/kidsflix.png", group: "KBHS : KIDS TV", url: "http://hardcoremedia.xyz/live/BG992263/38692743/7487.m3u8" },
-        { name: "GALI KURDISTAN TV", logo: "https://logo.m3uassets.com/galikurdistantv.png", group: "KU : KURDISTAN", url: "https://live.host247.net/gk/gksat/playlist.m3u8" },
-        { name: "4KURD", logo: "https://logo.m3uassets.com/urd.png", group: "KU : KURDISTAN", url: "https://4kuhls.persiana.live/hls/stream.m3u8" },
-        { name: "KURDISTAN24", logo: "https://logo.m3uassets.com/kurdistan24.png", group: "KU : KURDISTAN", url: "https://d1x82nydcxndze.cloudfront.net/live/index_720p25.m3u8" },
-        { name: "KURDSAT", logo: "https://logo.m3uassets.com/kurdsat.png", group: "KU : KURDISTAN", url: "http://hlspackager.akamaized.net/live/DB/KURDSAT_HD/HLS/KURDSAT_HD-mp4a_128000_eng=20000.m3u8" },
-        { name: "KURDSAT NEWS", logo: "https://logo.m3uassets.com/kurdsatnews.png", group: "KU : KURDISTAN", url: "https://hlspackager.akamaized.net/live/DB/KURDSAT_NEWS/HLS/KURDSAT_NEWS-mp4a_128000_eng=20000.m3u8" },
-        { name: "GALI KURDISATN", logo: "https://logo.m3uassets.com/galikurdistan.png", group: "KU : KURDISTAN", url: "https://live.host247.net/gk/gksat/chunklist_w1358946070.m3u8" },
-        { name: "KURDISTAN24 TV", logo: "https://logo.m3uassets.com/kurdistan24.png", group: "KU : KURDISTAN", url: "https://d1x82nydcxndze.cloudfront.net/live/index_240p25.m3u8" },
-        { name: "KURDSAT NEWS", logo: "https://logo.m3uassets.com/kurdsatnews.png", group: "KU : KURDISTAN", url: "http://hlspackager.akamaized.net/live/DB/KURDSAT_NEWS/HLS/KURDSAT_NEWS-avc1_400000=10000.m3u8" },
-        { name: "KURDSAT", logo: "https://logo.m3uassets.com/kurdsat.png", group: "KU : KURDISTAN", url: "https://iko-live.akamaized.net/KurdsatTV/master_2.m3u8" },
-        { name: "KURDISTAN 24 ᴴᴰ", logo: "https://logo.m3uassets.com/kurdistan24.png", group: "KU : KURDISTAN", url: "https://hawezhd@d1x82nydcxndze.cloudfront.net/live/index_720p25.m3u8" },
-        { name: "KURD CHANNEL ᴴᴰ", logo: "https://logo.m3uassets.com/kurdchannel.png", group: "KU : KURDISTAN", url: "https://iko-live.akamaized.net/kurdhd/master.m3u8" },
-        { name: "test 1", logo: "https://logo.m3uassets.com/test.png", group: "Kurdish Radio", url: "http://a8.asurahosting.com:7850/radio.mp3" },
-        { name: "spi_quran_hd", logo: "https://logo.m3uassets.com/quran.png", group: "🇮🇶 Kurdistan", url: "https://live20.bozztv.com/giatv/giatv-spi_quran_hd/spi_quran_hd/chunks.m3u8" },
-        { name: "MMN Quran ᴴᴰ", logo: "https://logo.m3uassets.com/quran.png", group: "🇮🇶 Kurdistan", url: "http://mmn.mypsx.net:1935/live/mmnhdquran/HawezHD.m3u8" },
-        { name: "KURDSAT", logo: "https://logo.m3uassets.com/kurdsat.png", group: "🇹🇳 kurdistan", url: "https://iko-live.akamaized.net/KurdsatTV/master_1.m3u8" },
-        { name: "MMN kids", logo: "https://logo.m3uassets.com/onkids.png", group: "KIDS : KURDI_ARABIC", url: "http://mmn.mypsx.net:1935/live/mmnhdkids/HawezHD.m3u8" },
-        { name: "Balapan TV", logo: "https://logo.m3uassets.com/balapan.png", group: "kids hd", url: "https://balapantv-stream.qazcdn.com/balapantv/balapantv/playlist.m3u8" },
-        { name: "EBS kids", logo: "https://logo.m3uassets.com/ebskids.png", group: "kids hd", url: "http://ebsonair.ebs.co.kr/ebsufamilypc/familypc1m/playlist.m3u8" },
-        { name: "Kids1", logo: "https://logo.m3uassets.com/kids1.png", group: "kids hd", url: "https://stream.ads.ottera.tv/playlist.m3u8?network_id=33" },
-        { name: "Kids2", logo: "https://logo.m3uassets.com/kids2.png", group: "kids hd", url: "https://stream.ads.ottera.tv/playlist.m3u8?network_id=34" },
-        { name: "Kids3", logo: "https://logo.m3uassets.com/kids3.png", group: "kids hd", url: "https://stream.ads.ottera.tv/playlist.m3u8?network_id=35" },
-        { name: "Kids4", logo: "https://logo.m3uassets.com/kids.png", group: "kids hd", url: "https://stream.ads.ottera.tv/playlist.m3u8?network_id=36" },
-        { name: "Kids5", logo: "https://logo.m3uassets.com/kids5.png", group: "kids hd", url: "https://stream.ads.ottera.tv/playlist.m3u8?network_id=37" },
-        { name: "Kids6", logo: "https://logo.m3uassets.com/kids.png", group: "kids hd", url: "https://stream-us-east-1.getpublica.com/playlist.m3u8?network_id=225" },
-        { name: "Kids7", logo: "https://logo.m3uassets.com/kids.png", group: "kids hd", url: "https://stream.ads.ottera.tv/playlist.m3u8?network_id=2613" },
-        { name: "MBC3 HD", logo: "https://logo.m3uassets.com/mbc3.png", group: "kids hd", url: "https://mbcbollywood-prod-dub-enc.edgenextcdn.net/out/v1/d5bbe570e1514d3d9a142657d33d85e6/index.m3u8" },
-        { name: "MBC3 USA HD", logo: "https://logo.m3uassets.com/mbc3.png", group: "kids hd", url: "https://mbc-3-usa-enc.edgenextcdn.net/out/v1/8bbfec9446d84c9ea0dfa34edede6db9/index.m3u8" },
-        { name: "Moonbug Kids", logo: "https://logo.m3uassets.com/moonbugkids.png", group: "kids hd", url: "https://moonbug-rokuus.amagi.tv/playlist.m3u8" },
-        { name: "PBS KIDS", logo: "https://logo.m3uassets.com/pbskids.png", group: "kids hd", url: "https://2-fss-2.streamhoster.com/pl_140/amlst:200914-1298290/playlist.m3u8?DVR" },
-        { name: "Ryan and Friends", logo: "https://logo.m3uassets.com/ryanandfriends.png", group: "kids hd", url: "https://ryanandfriends-samsungau.amagi.tv/playlist.m3u8" },
-        { name: "Spacetoon", logo: "https://logo.m3uassets.com/spacetoon.png", group: "kids hd", url: "https://spacetoon-prod-dub-enc.edgenextcdn.net/out/v1/6240b773a3f34cca95d119f9e76aec02/index.m3u8" },
-        { name: "Zoo Moo", logo: "https://logo.m3uassets.com/zoomoo.png", group: "kids hd", url: "https://zoomoo-samsungau.amagi.tv/playlist.m3u8" },
-        { name: "ZooMoo HD", logo: "https://logo.m3uassets.com/zoomoo.png", group: "kids hd", url: "https://zoomoo-samsungau.amagi.tv/playlist1080p.m3u8" },
-        { name: "TVE", logo: "https://logo.m3uassets.com/tve.png", group: "kids hd", url: "http://streaming.procergs.com.br:1935/tve/stve/chunklist.m3u8" },
-        { name: "Toon Goggles", logo: "https://logo.m3uassets.com/toongoggles.png", group: "kids hd", url: "https://stream-us-east-1.getpublica.com/playlist.m3u8?network_id=514" },
-        { name: "Tv Escolaᴴᴰ", logo: "https://logo.m3uassets.com/tvescola.png", group: "kids hd", url: "https://5c483b9d1019c.streamlock.net/8054/8054/chunklist.m3u8" },
-        { name: "ZooMoo", logo: "https://logo.m3uassets.com/zoomoo.png", group: "kids hd", url: "https://stream-us-east-1.getpublica.com/playlist.m3u8?network_id=60" },
-        { name: "TG Junior Kids", logo: "https://logo.m3uassets.com/tgjunior.png", group: "kids hd", url: "https://stream-us-east-1.getpublica.com/playlist.m3u8?network_id=31" },
-        { name: "Amou Yazid TV", logo: "https://logo.m3uassets.com/amouyazidtv.png", group: "kids hd", url: "http://mkstream.servehttp.com:1940/AmouYazid/ay1/chunklist.m3u8" },
-        { name: "Mr.Bean [ʀᴀkυᴛᴇɴ]", logo: "https://logo.m3uassets.com/mrbean.png", group: "kids hd", url: "https://amg00627-amg00627c30-rakuten-es-3990.playouts.now.amagi.tv/playlist/amg00627-banijayfast-mrbeanescc-rakutenes/playlist.m3u8" },
-        { name: "Léo e Lully", logo: "https://logo.m3uassets.com/e.png", group: "kids hd", url: "https://cdn-3.nxplay.com.br/LEO_E_LULLY/tracks-v1a1/mono.m3u8" },
-        { name: "TVG Xabarin", logo: "https://logo.m3uassets.com/a.png", group: "kids hd", url: "https://crtvg-infantil-schlive.flumotion.cloud/crtvglive/smil:channel5PRG.smil/playlist.m3u8" },
-        { name: "Barbie and Friends", logo: "https://logo.m3uassets.com/a.png", group: "kids hd", url: "https://d1xqdnwy1bo05f.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-jh1ol665g3amg/barb.m3u8" },
-        { name: "BBC Kids", logo: "https://logo.m3uassets.com/bbckids.png", group: "kids hd", url: "https://d26xbpvvy0tj0m.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-2ym2cgz6gmgem/playlist.m3u8" },
-        { name: "Duck tv", logo: "https://logo.m3uassets.com/ducktv.png", group: "kids hd", url: "https://dlir9brl2ge8j.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-9u2v4ro40jww6-ssai-prd/playlist.m3u8" },
-        { name: "Garfield and Friends", logo: "https://logo.m3uassets.com/garfieldandfriends.png", group: "kids hd", url: "https://is.gd/KGxtX7?60faf9ddfcc1f200070a5932.m3u8" },
-        { name: "Lego Kids", logo: "https://logo.m3uassets.com/legokidstv.png", group: "kids hd", url: "https://is.gd/TH0DFt?legKids.m3u8" },
-        { name: "Smurf tv", logo: "https://logo.m3uassets.com/surftv.png", group: "kids hd", url: "https://is.gd/V0cHd5?profile=GBBD1300001WA.m3u8" },
-        { name: "ROTANA_KIDS", logo: "https://logo.m3uassets.com/rotanakids.png", group: "kids hd", url: "https://playlist.fasttvcdn.com/pl/ptllxjd03j6g9oxxjdfapg/roya-kids/playlist.m3u8" },
-        { name: "Spacetoon", logo: "https://logo.m3uassets.com/spacetoon.png", group: "kids hd", url: "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-spacetoon/d8382fb9ab4b2307058f12c7ea90db54/index.m3u8" },
-        { name: "Xtrema Cartoons", logo: "https://logo.m3uassets.com/xtremacartoons.png", group: "kids hd", url: "https://stmv6.voxtvhd.com.br/xtremacartoons/xtremacartoons/playlist.m3u8" },
-        { name: "Camp Spoopy", logo: "https://logo.m3uassets.com/campspoopy.png", group: "kids hd", url: "https://stream.ads.ottera.tv/playlist.m3u8?network_id=269" },
-        { name: "Duck tv", logo: "https://logo.m3uassets.com/ducktv.png", group: "kids hd", url: "https://stream.ads.ottera.tv/playlist.m3u8?network_id=7617" },
-        { name: "Toon Goggles", logo: "https://logo.m3uassets.com/toongoggles.png", group: "kids hd", url: "https://tg-tg-br-samsung.otteravision.com/tg/tg_br_h265/tg_br_h265.m3u8" },
-        { name: "kuriakos kids", logo: "https://logo.m3uassets.com/kuriakoskids.png", group: "kids hd", url: "https://w2.manasat.com/kkids/smil:kkids.smil/playlist.m3u8" },
-        { name: "Clan", logo: "https://logo.m3uassets.com/clan.png", group: "kids hd", url: "https://ztnr.rtve.es/ztnr/5466990.m3u8" },
-        { name: "AfarinKids", logo: "https://logo.m3uassets.com/afarin.png", group: "🧒 Kids & Cartoons", url: "http://afarintv.flashmediacast.com:1935/afarinTV/livestream/chunklist_w1505309502.m3u8?nimblesessionid=574377&amp%252525253B" },
-        { name: "CARTOON NETWORK", logo: "https://logo.m3uassets.com/cartoonnetwork.png", group: "🧒 Kids & Cartoons", url: "http://45.5.117.57:8999/play/a05p/index.m3u8" },
-        { name: "24", logo: "https://logo.m3uassets.com/24.png", group: "gshty tv", url: "http://static.france24.com/live/F24_EN_LO_HLS/live_web.m3u8" },
-        { name: "Mihrab FM ᴴᴰ", logo: "https://logo.m3uassets.com/a.png", group: "gshty tv", url: "http://bblserver.ddns.net:1935/live/mihrabfm/HawezHD.m3u8" },
-        { name: "MMN ᴴᴰ", logo: "https://logo.m3uassets.com/mmntv.png", group: "gshty tv", url: "http://mmn.mypsx.net:1935/live/mmnhdradioturky/HawezHD.m3u8" },
-        { name: "Bnar ᴴᴰ", logo: "https://logo.m3uassets.com/a.png", group: "gshty tv", url: "http://baskhd.ddns.net:40/live/bnar4k/HawezHD.m3u8" },
-        { name: "Ranya City ᴴD", logo: "https://logo.m3uassets.com/a.png", group: "gshty tv", url: "https://avr.host247.net/Ranya/RanyaCity/playlist.m3u8" },
-        { name: "Hà Nội 1", logo: "https://logo.m3uassets.com/1.png", group: "gshty tv", url: "https://cloudstreamhntv.tek4tv.vn/capture/smil:HN1.smil/playlist.m3u8" },
-        { name: "Hà Nội 2", logo: "https://logo.m3uassets.com/2.png", group: "gshty tv", url: "https://cloudstreamhntv.tek4tv.vn/live/smil:HN2.smil/playlist.m3u8" },
-        { name: "Kiên Giang 1", logo: "https://logo.m3uassets.com/1.png", group: "gshty tv", url: "http://tv.kgtv.vn/live/kgtv1/kgtv1.m3u8" },
-        { name: "Nghệ An", logo: "https://logo.m3uassets.com/ebnghana.png", group: "gshty tv", url: "https://live.truyenhinhnghean.vn/hls/na1/index.m3u8" },
-        { name: "Quảng Ninh 1", logo: "https://logo.m3uassets.com/1.png", group: "gshty tv", url: "http://103.90.220.236/qtvlive/tv1live.m3u8" },
-        { name: "Quảng Ninh 3", logo: "https://logo.m3uassets.com/3.png", group: "gshty tv", url: "http://103.90.220.236/qtvlive/tv3live.m3u8" }    ];
+        // ==================== گۆڕاوە گشتییەکان ====================
+        let currentHls = null;
+        let activeChannel = null;
+        const video = document.getElementById('videoPlayer');
+        const currentChannelSpan = document.querySelector('#currentChannel span');
+        const channelsGrid = document.getElementById('channelsGrid');
+        const searchInput = document.getElementById('searchInput');
+        const categorySelect = document.getElementById('categorySelect');
+        const countDisplay = document.getElementById('countDisplay');
 
-    // ==================== کۆدی سەرەکی ====================
-    let currentHls = null;
-    let activeChannelIndex = -1;
-    let isFullscreen = false;
-    const video = document.getElementById('videoPlayer');
-    const appContainer = document.querySelector('.app-container');
-
-    function populateCategories() {
-        const cats = [...new Set(allChannels.map(ch => ch.group || "گشتی"))];
-        const select = document.getElementById('categorySelect');
-        select.innerHTML = '<option value="ALL">📡 هەموو کەناڵەکان</option>';
-        cats.sort().forEach(cat => {
-            select.innerHTML += `<option value="${cat.replace(/"/g, '&quot;')}">🎬 ${cat}</option>`;
-        });
-    }
-
-    function getFilteredChannels() {
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-        const category = document.getElementById('categorySelect').value;
-        return allChannels.filter(ch => {
-            const matchSearch = ch.name.toLowerCase().includes(searchTerm);
-            const matchCat = category === 'ALL' || ch.group === category;
-            return matchSearch && matchCat;
-        });
-    }
-
-    function renderChannels() {
-        const filtered = getFilteredChannels();
-        const grid = document.getElementById('channelsGrid');
-        if (filtered.length === 0) {
-            grid.innerHTML = '<div style="padding:60px; text-align:center;"><i class="fas fa-tv"></i> هیچ کەناڵێک نەدۆزرایەوە</div>';
-            document.getElementById('stats').innerHTML = `📡 0 / ${allChannels.length}`;
-            return;
-        }
-        grid.innerHTML = '';
-        filtered.forEach((ch) => {
-            const originalIndex = allChannels.findIndex(c => c.name === ch.name && c.url === ch.url);
-            const card = document.createElement('div');
-            card.className = 'channel-card';
-            if (originalIndex === activeChannelIndex) card.classList.add('active');
-            const logoHtml = ch.logo && ch.logo.startsWith('http') 
-                ? `<img src="${ch.logo}" alt="logo" onerror="this.onerror=null;this.parentElement.innerHTML='<i class=\'fas fa-tv\'></i>';">` 
-                : `<i class="fas fa-tv"></i>`;
-            card.innerHTML = `
-                <div class="channel-logo">${logoHtml}</div>
-                <div class="channel-name">${ch.name}</div>
-                <div class="channel-group">${ch.group || 'گشتی'}</div>
-            `;
-            card.onclick = () => playChannelByIndex(originalIndex);
-            grid.appendChild(card);
-        });
-        document.getElementById('stats').innerHTML = `📡 ${filtered.length} / ${allChannels.length}`;
-    }
-
-    function enterFullscreen() {
-        const elem = document.documentElement;
-        if (elem.requestFullscreen) elem.requestFullscreen();
-        else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
-        else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
-        
-        setTimeout(() => {
-            document.body.classList.add('fullscreen-active');
-            isFullscreen = true;
-        }, 100);
-    }
-
-    function exitFullscreen() {
-        if (document.exitFullscreen) document.exitFullscreen();
-        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-        else if (document.msExitFullscreen) document.msExitFullscreen();
-        
-        document.body.classList.remove('fullscreen-active');
-        isFullscreen = false;
-    }
-
-    function playChannelByIndex(index, autoFullscreen = true) {
-        if (index < 0 || index >= allChannels.length) return;
-        const ch = allChannels[index];
-        if (!ch.url) return;
-        
-        activeChannelIndex = index;
-        document.getElementById('currentChannelName').innerHTML = ch.name;
-        
-        if (currentHls) {
-            currentHls.destroy();
-            currentHls = null;
-        }
-        
-        if (Hls.isSupported()) {
-            currentHls = new Hls({ capLevelToPlayerSize: true });
-            currentHls.attachMedia(video);
-            currentHls.loadSource(ch.url);
-            currentHls.on(Hls.Events.MANIFEST_PARSED, () => {
-                video.play().catch(e => console.log(e));
-                if (autoFullscreen && !isFullscreen) {
-                    setTimeout(() => enterFullscreen(), 300);
-                }
+        // ==================== پڕکردنەوەی کاتێگۆرییەکان ====================
+        function populateCategories() {
+            const categories = [...new Set(allChannels.map(ch => ch.group || 'گشتی'))].sort();
+            categorySelect.innerHTML = '<option value="ALL">📡 هەموو کەناڵەکان</option>';
+            categories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat;
+                option.textContent = `📺 ${cat}`;
+                categorySelect.appendChild(option);
             });
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = ch.url;
-            video.play().catch(e => console.log(e));
-            if (autoFullscreen && !isFullscreen) {
-                setTimeout(() => enterFullscreen(), 300);
+        }
+
+        // ==================== فلتەرکردنی کەناڵەکان ====================
+        function getFilteredChannels() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const category = categorySelect.value;
+            
+            return allChannels.filter(ch => {
+                const matchSearch = !searchTerm || ch.name.toLowerCase().includes(searchTerm);
+                const matchCategory = category === 'ALL' || ch.group === category;
+                return matchSearch && matchCategory;
+            });
+        }
+
+        // ==================== ڕێندەرکردنی کەناڵەکان ====================
+        function renderChannels() {
+            const filtered = getFilteredChannels();
+            countDisplay.textContent = filtered.length;
+            
+            if (filtered.length === 0) {
+                channelsGrid.innerHTML = '<div class="empty-message"><i class="fas fa-search" style="font-size: 3rem; margin-bottom: 16px; opacity: 0.5;"></i><br>هیچ کەناڵێک نەدۆزرایەوە</div>';
+                return;
             }
-        } else {
-            alert('براوسەرەکەت پشتیوانی پەخشی زیندوو ناکات');
+            
+            let html = '';
+            filtered.forEach(ch => {
+                const isActive = activeChannel && activeChannel.url === ch.url;
+                const activeClass = isActive ? 'active' : '';
+                
+                html += `
+                    <div class="channel-card ${activeClass}" onclick="playChannel('${ch.url.replace(/'/g, "\\'")}', '${ch.name.replace(/'/g, "\\'")}')">
+                        <div class="channel-logo">
+                            ${ch.logo && ch.logo.startsWith('http') 
+                                ? `<img src="${ch.logo}" alt="${ch.name}" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\'fas fa-tv\'></i>';">` 
+                                : '<i class="fas fa-tv"></i>'}
+                        </div>
+                        <div class="channel-name">${ch.name}</div>
+                        <div class="channel-group">${ch.group || 'گشتی'}</div>
+                    </div>
+                `;
+            });
+            
+            channelsGrid.innerHTML = html;
         }
+
+        // ==================== پەخشکردنی کەناڵ ====================
+        window.playChannel = function(url, name) {
+            // دۆزینەوەی کەناڵی چالاک
+            activeChannel = allChannels.find(ch => ch.url === url);
+            
+            // نوێکردنەوەی ناوی کەناڵ
+            currentChannelSpan.textContent = name;
+            
+            // ڕاگرتنی پەخشکردنی پێشوو
+            if (currentHls) {
+                currentHls.destroy();
+                currentHls = null;
+            }
+            
+            // پەخشکردنی کەناڵی نوێ
+            if (Hls.isSupported()) {
+                currentHls = new Hls({
+                    capLevelToPlayerSize: true,
+                    maxBufferLength: 30,
+                    maxMaxBufferLength: 600
+                });
+                currentHls.loadSource(url);
+                currentHls.attachMedia(video);
+                currentHls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    video.play().catch(e => console.log('Play error:', e));
+                });
+                currentHls.on(Hls.Events.ERROR, (event, data) => {
+                    if (data.fatal) {
+                        switch(data.type) {
+                            case Hls.ErrorTypes.NETWORK_ERROR:
+                                console.log('Network error, trying to recover...');
+                                currentHls.startLoad();
+                                break;
+                            case Hls.ErrorTypes.MEDIA_ERROR:
+                                console.log('Media error, trying to recover...');
+                                currentHls.recoverMediaError();
+                                break;
+                            default:
+                                console.log('Fatal error, cannot recover');
+                                break;
+                        }
+                    }
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = url;
+                video.play().catch(e => console.log('Play error:', e));
+            } else {
+                alert('⛔ وێبگەڕەکەت پشتگیری HLS ناکات');
+            }
+            
+            // نوێکردنەوەی ڕێندەر
+            renderChannels();
+            
+            // سکرۆڵ بۆ سەرەوە لە مۆبایل
+            if (window.innerWidth <= 768) {
+                document.querySelector('.player-wrapper').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        };
+
+        // ==================== گوێگرتن لە گۆڕانکارییەکان ====================
+        searchInput.addEventListener('input', renderChannels);
+        categorySelect.addEventListener('change', renderChannels);
+
+        // ==================== دەستپێکردن ====================
+        populateCategories();
         renderChannels();
-    }
-
-    // Fullscreen change listener
-    document.addEventListener('fullscreenchange', () => {
-        if (!document.fullscreenElement) {
-            document.body.classList.remove('fullscreen-active');
-            isFullscreen = false;
-        }
-    });
-
-    // Exit hint element
-    const exitHint = document.createElement('div');
-    exitHint.className = 'exit-fullscreen-hint';
-    exitHint.innerHTML = '<i class="fas fa-compress"></i> دەرچوون لە شاشەی پڕ';
-    exitHint.onclick = () => exitFullscreen();
-    document.body.appendChild(exitHint);
-
-    // Click on video to exit fullscreen
-    video.addEventListener('click', () => {
-        if (isFullscreen) exitFullscreen();
-    });
-
-    document.getElementById('forceFullscreenBtn').onclick = () => enterFullscreen();
-    document.getElementById('searchInput').addEventListener('input', () => renderChannels());
-    document.getElementById('categorySelect').addEventListener('change', () => renderChannels());
-    document.getElementById('themeToggle').onclick = () => {
-        document.body.classList.toggle('light');
-        const icon = document.querySelector('#themeToggle i');
-        const text = document.querySelector('#themeToggle span');
-        if (document.body.classList.contains('light')) {
-            icon.classList.replace('fa-moon', 'fa-sun');
-            text.innerHTML = ' تاریک';
-        } else {
-            icon.classList.replace('fa-sun', 'fa-moon');
-            text.innerHTML = ' ڕووناکی';
-        }
-    };
-
-    populateCategories();
-    renderChannels();
-</script>
+        
+        // پەخشکردنی یەکەم کەناڵ (ئارەزوومەندانە)
+        // ئەگەر دەتەوێت یەکەم کەناڵ بە شێوەی خۆکار پەخش بکرێت، ئەم هێڵە لێدەربکە:
+        // setTimeout(() => { if (allChannels.length > 0) playChannel(allChannels[0].url, allChannels[0].name); }, 1000);
+    </script>
 </body>
 </html>
