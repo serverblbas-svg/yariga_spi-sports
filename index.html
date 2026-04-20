@@ -3,294 +3,522 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>kurdish channels - 161 کەناڵ</title>
+    <title>kurdish-channels
+ - پەخشی پیشەسازی</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, system-ui;
-            background: radial-gradient(circle at 20% 30%, #0a0f1e, #03060c);
+            font-family: 'Poppins', 'Segoe UI', Tahoma, system-ui;
+            background: linear-gradient(145deg, #0a0f1e 0%, #0a1a2f 50%, #03060c 100%);
             min-height: 100vh;
             color: #fff;
-            padding: 20px;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
+        /* Fullscreen Mode */
         body.fullscreen-active {
-            padding: 0;
             overflow: hidden;
+            background: #000;
         }
+
         body.fullscreen-active .app-container {
             border-radius: 0;
             padding: 0;
             margin: 0;
             max-width: 100%;
             height: 100vh;
+            background: #000;
+            backdrop-filter: none;
         }
+
         body.fullscreen-active .header,
         body.fullscreen-active .filters,
         body.fullscreen-active .channels-grid,
         body.fullscreen-active .player-footer .live-badge,
-        body.fullscreen-active .player-footer .now-playing i {
+        body.fullscreen-active .theme-toggle {
             display: none;
         }
+
         body.fullscreen-active .player-area {
             margin-bottom: 0;
             border-radius: 0;
             height: 100vh;
+            position: relative;
         }
+
         body.fullscreen-active #videoPlayer {
             height: 100vh;
             aspect-ratio: unset;
+            object-fit: contain;
         }
+
         body.fullscreen-active .player-footer {
             position: fixed;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            background: rgba(0,0,0,0.7);
-            border-radius: 50px;
-            padding: 8px 20px;
-            justify-content: center;
-            backdrop-filter: blur(10px);
+            bottom: 30px;
+            left: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.85), rgba(0,0,0,0.7));
+            backdrop-filter: blur(20px);
+            border-radius: 60px;
+            padding: 12px 25px;
             display: flex;
+            justify-content: center;
+            align-items: center;
             z-index: 1000;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: slideUp 0.5s ease;
         }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         body.fullscreen-active .player-footer .now-playing {
-            font-size: 0.9rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
+
         body.fullscreen-active .player-footer .live-badge {
             display: inline-block;
-            margin-right: 10px;
+            background: #e50914;
+            padding: 5px 15px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            animation: pulse 1.5s infinite;
         }
+
+        body.fullscreen-active .exit-fullscreen-hint {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            z-index: 1001;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.2);
+            font-weight: 500;
+        }
+
+        body.fullscreen-active .exit-fullscreen-hint:hover {
+            background: rgba(255,65,108,0.8);
+            transform: scale(1.05);
+        }
+
+        /* Glassmorphism Container */
         .app-container {
             max-width: 1600px;
-            margin: 0 auto;
-            background: rgba(10, 20, 35, 0.55);
-            backdrop-filter: blur(14px);
+            margin: 20px auto;
+            background: rgba(10, 25, 45, 0.45);
+            backdrop-filter: blur(16px);
             border-radius: 48px;
-            padding: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.4);
-            transition: all 0.3s ease;
+            padding: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 35px 60px rgba(0, 0, 0, 0.4);
+            transition: all 0.4s ease;
         }
-        .header { text-align: center; margin-bottom: 30px; position: relative; }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 35px;
+            position: relative;
+        }
+
         .logo {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #FF6A5C, #FF416C);
+            background: linear-gradient(135deg, #FF6A5C, #FF416C, #FF6A5C);
+            background-size: 200% auto;
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            animation: shimmer 3s linear infinite;
+            letter-spacing: 1px;
         }
+
+        @keyframes shimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         .logo span {
-            background: linear-gradient(135deg, #00C9FF, #92FE9D);
+            background: linear-gradient(135deg, #00D2FF, #3A7BD5, #00D2FF);
+            background-size: 200% auto;
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            animation: shimmer 3s linear infinite;
         }
-        .sub { color: #aaa; margin-top: 8px; font-size: 0.9rem; }
+
+        .sub {
+            color: rgba(255,255,255,0.65);
+            margin-top: 10px;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        /* Buttons */
+        .theme-toggle, .fullscreen-control {
+            position: absolute;
+            top: 0;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50px;
+            padding: 10px 20px;
+            cursor: pointer;
+            color: white;
+            font-size: 0.9rem;
+            backdrop-filter: blur(8px);
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
         .theme-toggle {
-            position: absolute;
             left: 20px;
-            top: 0;
-            background: rgba(255,255,255,0.1);
-            border: none;
-            border-radius: 40px;
-            padding: 8px 16px;
-            cursor: pointer;
-            color: white;
-            font-size: 1rem;
-            backdrop-filter: blur(5px);
         }
-        .fullscreen-btn {
-            position: absolute;
+
+        .fullscreen-control {
             right: 20px;
-            top: 0;
-            background: rgba(255,255,255,0.1);
-            border: none;
-            border-radius: 40px;
-            padding: 8px 16px;
-            cursor: pointer;
-            color: white;
-            font-size: 1rem;
-            backdrop-filter: blur(5px);
         }
-        .fullscreen-btn:hover, .theme-toggle:hover {
-            background: rgba(255,255,255,0.2);
+
+        .theme-toggle:hover, .fullscreen-control:hover {
+            background: rgba(255,65,108,0.7);
+            border-color: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
         }
+
+        /* Video Player */
         .player-area {
             background: #000;
             border-radius: 32px;
             overflow: hidden;
-            margin-bottom: 35px;
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: all 0.3s ease;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255,255,255,0.15);
+            box-shadow: 0 25px 45px -12px rgba(0,0,0,0.5);
+            transition: all 0.3s;
         }
+
         #videoPlayer {
             width: 100%;
             aspect-ratio: 16/9;
-            background: black;
+            background: #0a0a0a;
         }
+
         .player-footer {
-            padding: 12px 20px;
-            background: rgba(0,0,0,0.6);
+            padding: 15px 25px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,0,0,0.5));
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .now-playing {
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
             gap: 10px;
         }
-        .now-playing { font-weight: bold; font-size: 1.1rem; }
+
+        .now-playing i {
+            color: #FF416C;
+            font-size: 1.2rem;
+        }
+
         .live-badge {
-            background: #e50914;
-            padding: 4px 12px;
-            border-radius: 30px;
+            background: linear-gradient(135deg, #e50914, #ff4d4d);
+            padding: 5px 16px;
+            border-radius: 50px;
             font-size: 0.7rem;
             font-weight: bold;
-            animation: pulse 1.2s infinite;
+            letter-spacing: 1.5px;
+            animation: pulse 1.5s infinite;
+            box-shadow: 0 0 10px rgba(229,9,20,0.5);
         }
+
         @keyframes pulse {
-            0% { opacity: 0.6; transform: scale(0.96);}
+            0% { opacity: 0.7; transform: scale(0.96);}
             100% { opacity: 1; transform: scale(1);}
         }
+
+        /* Filters */
         .filters {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 25px;
+            gap: 15px;
+            margin-bottom: 30px;
             justify-content: space-between;
             align-items: center;
         }
-        .search-box { flex: 2; min-width: 200px; }
+
+        .search-box {
+            flex: 2;
+            min-width: 240px;
+        }
+
         .search-box input {
             width: 100%;
-            padding: 12px 20px;
-            border-radius: 50px;
+            padding: 14px 24px;
+            border-radius: 60px;
             border: none;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(8px);
             color: white;
             font-size: 1rem;
             outline: none;
+            transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        .category-filter select {
-            padding: 12px 20px;
-            border-radius: 50px;
-            background: rgba(255,255,255,0.1);
-            color: white;
-            border: none;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-        .stats {
-            background: rgba(0,0,0,0.4);
-            padding: 6px 15px;
-            border-radius: 40px;
-            font-size: 0.8rem;
-        }
-        .channels-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 18px;
-            max-height: 580px;
-            overflow-y: auto;
-            padding: 5px 5px 15px 5px;
-        }
-        .channel-card {
-            background: rgba(25, 35, 55, 0.7);
-            backdrop-filter: blur(4px);
-            border-radius: 24px;
-            padding: 14px 8px;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.25s ease;
-            border: 1px solid rgba(255,255,255,0.08);
-        }
-        .channel-card:hover {
-            transform: translateY(-5px);
-            background: rgba(45, 60, 90, 0.9);
+
+        .search-box input:focus {
+            background: rgba(255,255,255,0.15);
             border-color: #FF416C;
         }
-        .channel-card.active {
-            background: linear-gradient(145deg, #FF416C, #FF6A5C);
-            border: none;
-            box-shadow: 0 8px 20px rgba(255,65,108,0.4);
+
+        .search-box input::placeholder {
+            color: rgba(255,255,255,0.5);
         }
+
+        .category-filter select {
+            padding: 14px 28px;
+            border-radius: 60px;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(8px);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.1);
+            font-size: 1rem;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .category-filter select:hover {
+            background: rgba(255,255,255,0.15);
+            border-color: #FF416C;
+        }
+
+        .stats {
+            background: rgba(255,65,108,0.2);
+            backdrop-filter: blur(8px);
+            padding: 8px 20px;
+            border-radius: 60px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border: 1px solid rgba(255,65,108,0.3);
+        }
+
+        /* Channels Grid - Professional Design */
+        .channels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 22px;
+            max-height: 600px;
+            overflow-y: auto;
+            padding: 8px 8px 20px 8px;
+        }
+
+        .channel-card {
+            background: linear-gradient(145deg, rgba(25, 40, 65, 0.7), rgba(15, 25, 45, 0.8));
+            backdrop-filter: blur(8px);
+            border-radius: 28px;
+            padding: 18px 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255,255,255,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .channel-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .channel-card:hover::before {
+            left: 100%;
+        }
+
+        .channel-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            background: linear-gradient(145deg, rgba(45, 65, 100, 0.9), rgba(35, 50, 80, 0.9));
+            border-color: rgba(255,65,108,0.6);
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
+        }
+
+        .channel-card.active {
+            background: linear-gradient(135deg, #FF416C, #FF6A5C);
+            border: none;
+            box-shadow: 0 15px 30px rgba(255,65,108,0.4);
+        }
+
+        .channel-card.active .channel-name {
+            color: white;
+        }
+
         .channel-logo {
-            width: 70px;
-            height: 70px;
-            margin: 0 auto 10px;
-            background: rgba(0,0,0,0.3);
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 12px;
+            background: rgba(0,0,0,0.35);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            transition: all 0.3s;
+            border: 2px solid rgba(255,255,255,0.1);
         }
+
+        .channel-card:hover .channel-logo {
+            transform: scale(1.05);
+            border-color: #FF416C;
+        }
+
         .channel-logo img {
             width: 100%;
             height: 100%;
             object-fit: contain;
+            border-radius: 50%;
         }
-        .channel-logo i { font-size: 2.2rem; color: #ddd; }
-        .channel-name { font-weight: 600; font-size: 0.85rem; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .channel-group { font-size: 0.7rem; opacity: 0.7; }
-        .channels-grid::-webkit-scrollbar { width: 6px; }
-        .channels-grid::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
-        .channels-grid::-webkit-scrollbar-thumb { background: #FF416C; border-radius: 10px; }
-        body.light {
-            background: radial-gradient(circle at 20% 30%, #e0eafc, #cfdef3);
-            color: #111;
+
+        .channel-logo i {
+            font-size: 2.5rem;
+            color: rgba(255,255,255,0.8);
         }
-        body.light .app-container { background: rgba(255,255,255,0.4); }
-        body.light .channel-card { background: rgba(255,255,255,0.7); color: #111; }
-        body.light .search-box input, body.light .category-filter select { background: rgba(0,0,0,0.1); color: #111; }
-        @media (max-width: 700px) {
-            .app-container { padding: 16px; }
-            .channels-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
-            .channel-name { font-size: 0.75rem; }
-        }
-        .exit-fullscreen-hint {
-            position: fixed;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.8);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            z-index: 1001;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.3s;
+
+        .channel-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: rgba(255,255,255,0.95);
         }
-        body.fullscreen-active .exit-fullscreen-hint {
-            opacity: 1;
+
+        .channel-group {
+            font-size: 0.7rem;
+            opacity: 0.65;
+            letter-spacing: 0.5px;
+        }
+
+        /* Scrollbar */
+        .channels-grid::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .channels-grid::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+        }
+
+        .channels-grid::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #FF416C, #FF6A5C);
+            border-radius: 10px;
+        }
+
+        /* Light Theme */
+        body.light {
+            background: linear-gradient(145deg, #e8ecf2 0%, #dce1e8 100%);
+            color: #1a1a2e;
+        }
+
+        body.light .app-container {
+            background: rgba(255,255,255,0.4);
+            backdrop-filter: blur(16px);
+            border-color: rgba(0,0,0,0.08);
+        }
+
+        body.light .channel-card {
+            background: rgba(255,255,255,0.7);
+            color: #1a1a2e;
+            border-color: rgba(0,0,0,0.05);
+        }
+
+        body.light .channel-card .channel-name {
+            color: #1a1a2e;
+        }
+
+        body.light .search-box input,
+        body.light .category-filter select {
+            background: rgba(0,0,0,0.06);
+            color: #1a1a2e;
+            border-color: rgba(0,0,0,0.1);
+        }
+
+        body.light .stats {
+            background: rgba(255,65,108,0.15);
+            color: #1a1a2e;
+        }
+
+        @media (max-width: 768px) {
+            .app-container { padding: 18px; margin: 10px; }
+            .channels-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+            .channel-name { font-size: 0.75rem; }
+            .channel-logo { width: 60px; height: 60px; }
+            .logo { font-size: 1.8rem; }
         }
     </style>
 </head>
 <body>
 <div class="app-container">
     <div class="header">
-        <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i> ڕووناک/تاریک</button>
-        <button class="fullscreen-btn" id="exitFullscreenBtn" style="display:none;"><i class="fas fa-compress"></i> دەرچوون لە شاشەی پڕ</button>
-        <div class="logo">kurdish <span>channels</span></div>
-        <div class="sub">١٦١ کەناڵ | پەخشی ڕاستەوخۆ</div>
+        <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i> <span>ڕووناکی</span></button>
+        <button class="fullscreen-control" id="forceFullscreenBtn"><i class="fas fa-expand"></i> <span>شاشەی پڕ</span></button>
+        <div class="logo">SPI <span>TV</span> 4K</div>
+        <div class="sub">پەخشی ڕاستەوخۆ بە کوالێتی 4K | ١٦١+ کەناڵ</div>
     </div>
 
     <div class="player-area">
         <video id="videoPlayer" controls playsinline></video>
         <div class="player-footer">
-            <div class="now-playing"><i class="fas fa-tower-broadcast"></i> <span id="currentChannelName">هیچ کەناڵێک هەڵنەبژێراوە</span></div>
-            <div class="live-badge">LIVE</div>
+            <div class="now-playing">
+                <i class="fas fa-tower-broadcast"></i>
+                <span id="currentChannelName">هیچ کەناڵێک هەڵنەبژێراوە</span>
+            </div>
+            <div class="live-badge">
+                <i class="fas fa-circle" style="font-size: 0.6rem; margin-right: 5px;"></i> LIVE
+            </div>
         </div>
     </div>
 
     <div class="filters">
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="🔍 گەڕان بە ناوی کەناڵ...">
+            <input type="text" id="searchInput" placeholder="🔍 گەڕان لە نێوان ١٦١ کەناڵدا...">
         </div>
         <div class="category-filter">
             <select id="categorySelect">
@@ -300,13 +528,14 @@
         <div class="stats" id="stats">بارکردن...</div>
     </div>
 
-    <div class="channels-grid" id="channelsGrid"></div>
+    <div class="channels-grid" id="channelsGrid">
+        <div style="text-align:center; padding:60px;"><i class="fas fa-spinner fa-spin"></i> بارکردنی کەناڵەکان...</div>
+    </div>
 </div>
-<div class="exit-fullscreen-hint" id="exitHint">⛶ لە شاشەی پڕدا - کلیک لەسەر ڤیدیۆ بکە بۆ دەرچوون یان دەست لە کیبۆرد بکە بە ESC</div>
 
 <script>
-    // ==================== 161 کەناڵەکەت بە تەواوی ====================
-    const allChannelsData = [
+    // ==================== 161+ کەناڵەکان ====================
+    const allChannels = [
         { name: "ESRA TV 1", logo: "https://logo.m3uassets.com/pesrayatv.png", group: "KURDISH", url: "https://live20.bozztv.com/giatv/giatv-ESRAHD/ESRAHD/chunks.m3u8" },
         { name: "ESRA TV 2", logo: "https://logo.m3uassets.com/pesrayatv.png", group: "KURDISH", url: "https://live20.bozztv.com/giatv/giatv-esra2hd_kamalblbas/esra2hd_kamalblbas/chunks.m3u8" },
         { name: "spi kids 4k", logo: "https://logo.m3uassets.com/id.png", group: "KURDISH", url: "https://live20.bozztv.com/giatv/giatv-spikids4k2025/spikids4k2025/chunks.m3u8" },
@@ -465,8 +694,7 @@
         { name: "Kiên Giang 1", logo: "https://logo.m3uassets.com/1.png", group: "gshty tv", url: "http://tv.kgtv.vn/live/kgtv1/kgtv1.m3u8" },
         { name: "Nghệ An", logo: "https://logo.m3uassets.com/ebnghana.png", group: "gshty tv", url: "https://live.truyenhinhnghean.vn/hls/na1/index.m3u8" },
         { name: "Quảng Ninh 1", logo: "https://logo.m3uassets.com/1.png", group: "gshty tv", url: "http://103.90.220.236/qtvlive/tv1live.m3u8" },
-        { name: "Quảng Ninh 3", logo: "https://logo.m3uassets.com/3.png", group: "gshty tv", url: "http://103.90.220.236/qtvlive/tv3live.m3u8" }
-    ];
+        { name: "Quảng Ninh 3", logo: "https://logo.m3uassets.com/3.png", group: "gshty tv", url: "http://103.90.220.236/qtvlive/tv3live.m3u8" }    ];
 
     // ==================== کۆدی سەرەکی ====================
     let currentHls = null;
@@ -474,14 +702,13 @@
     let isFullscreen = false;
     const video = document.getElementById('videoPlayer');
     const appContainer = document.querySelector('.app-container');
-    const exitFullscreenBtn = document.getElementById('exitFullscreenBtn');
 
     function populateCategories() {
         const cats = [...new Set(allChannels.map(ch => ch.group || "گشتی"))];
         const select = document.getElementById('categorySelect');
         select.innerHTML = '<option value="ALL">📡 هەموو کەناڵەکان</option>';
         cats.sort().forEach(cat => {
-            select.innerHTML += `<option value="${cat.replace(/"/g, '&quot;')}">📺 ${cat}</option>`;
+            select.innerHTML += `<option value="${cat.replace(/"/g, '&quot;')}">🎬 ${cat}</option>`;
         });
     }
 
@@ -499,12 +726,12 @@
         const filtered = getFilteredChannels();
         const grid = document.getElementById('channelsGrid');
         if (filtered.length === 0) {
-            grid.innerHTML = '<div style="padding:40px; text-align:center;">هیچ کەناڵێک نەدۆزرایەوە</div>';
-            document.getElementById('stats').innerHTML = `📡 0 / ${allChannels.length} کەناڵ`;
+            grid.innerHTML = '<div style="padding:60px; text-align:center;"><i class="fas fa-tv"></i> هیچ کەناڵێک نەدۆزرایەوە</div>';
+            document.getElementById('stats').innerHTML = `📡 0 / ${allChannels.length}`;
             return;
         }
         grid.innerHTML = '';
-        filtered.forEach((ch, idx) => {
+        filtered.forEach((ch) => {
             const originalIndex = allChannels.findIndex(c => c.name === ch.name && c.url === ch.url);
             const card = document.createElement('div');
             card.className = 'channel-card';
@@ -520,48 +747,35 @@
             card.onclick = () => playChannelByIndex(originalIndex);
             grid.appendChild(card);
         });
-        document.getElementById('stats').innerHTML = `📡 ${filtered.length} / ${allChannels.length} کەناڵ`;
+        document.getElementById('stats').innerHTML = `📡 ${filtered.length} / ${allChannels.length}`;
     }
 
     function enterFullscreen() {
         const elem = document.documentElement;
-        if (elem.requestFullscreen) {
-            elem.requestFullscreen();
-        } else if (elem.webkitRequestFullscreen) {
-            elem.webkitRequestFullscreen();
-        } else if (elem.msRequestFullscreen) {
-            elem.msRequestFullscreen();
-        }
-        isFullscreen = true;
-        document.body.classList.add('fullscreen-active');
-        exitFullscreenBtn.style.display = 'block';
+        if (elem.requestFullscreen) elem.requestFullscreen();
+        else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+        else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+        
+        setTimeout(() => {
+            document.body.classList.add('fullscreen-active');
+            isFullscreen = true;
+        }, 100);
     }
 
     function exitFullscreen() {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
-        }
-        isFullscreen = false;
+        if (document.exitFullscreen) document.exitFullscreen();
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+        else if (document.msExitFullscreen) document.msExitFullscreen();
+        
         document.body.classList.remove('fullscreen-active');
-        exitFullscreenBtn.style.display = 'none';
+        isFullscreen = false;
     }
 
-    function toggleFullscreen() {
-        if (!isFullscreen) {
-            enterFullscreen();
-        } else {
-            exitFullscreen();
-        }
-    }
-
-    function playChannelByIndex(index, goFullscreen = true) {
+    function playChannelByIndex(index, autoFullscreen = true) {
         if (index < 0 || index >= allChannels.length) return;
         const ch = allChannels[index];
         if (!ch.url) return;
+        
         activeChannelIndex = index;
         document.getElementById('currentChannelName').innerHTML = ch.name;
         
@@ -569,21 +783,22 @@
             currentHls.destroy();
             currentHls = null;
         }
+        
         if (Hls.isSupported()) {
             currentHls = new Hls({ capLevelToPlayerSize: true });
             currentHls.attachMedia(video);
             currentHls.loadSource(ch.url);
             currentHls.on(Hls.Events.MANIFEST_PARSED, () => {
                 video.play().catch(e => console.log(e));
-                if (goFullscreen && !isFullscreen) {
-                    setTimeout(() => enterFullscreen(), 500);
+                if (autoFullscreen && !isFullscreen) {
+                    setTimeout(() => enterFullscreen(), 300);
                 }
             });
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
             video.src = ch.url;
             video.play().catch(e => console.log(e));
-            if (goFullscreen && !isFullscreen) {
-                setTimeout(() => enterFullscreen(), 500);
+            if (autoFullscreen && !isFullscreen) {
+                setTimeout(() => enterFullscreen(), 300);
             }
         } else {
             alert('براوسەرەکەت پشتیوانی پەخشی زیندوو ناکات');
@@ -591,37 +806,40 @@
         renderChannels();
     }
 
-    // گوێگر بۆ گۆڕانی شاشەی پڕ لە ڕێگەی ESC
+    // Fullscreen change listener
     document.addEventListener('fullscreenchange', () => {
         if (!document.fullscreenElement) {
-            isFullscreen = false;
             document.body.classList.remove('fullscreen-active');
-            exitFullscreenBtn.style.display = 'none';
-        } else {
-            isFullscreen = true;
-            document.body.classList.add('fullscreen-active');
-            exitFullscreenBtn.style.display = 'block';
+            isFullscreen = false;
         }
     });
 
-    // کلیک لەسەر ڤیدیۆ بۆ دەرچوون لە شاشەی پڕ
+    // Exit hint element
+    const exitHint = document.createElement('div');
+    exitHint.className = 'exit-fullscreen-hint';
+    exitHint.innerHTML = '<i class="fas fa-compress"></i> دەرچوون لە شاشەی پڕ';
+    exitHint.onclick = () => exitFullscreen();
+    document.body.appendChild(exitHint);
+
+    // Click on video to exit fullscreen
     video.addEventListener('click', () => {
-        if (isFullscreen) {
-            exitFullscreen();
-        }
+        if (isFullscreen) exitFullscreen();
     });
 
-    exitFullscreenBtn.addEventListener('click', () => {
-        exitFullscreen();
-    });
-
+    document.getElementById('forceFullscreenBtn').onclick = () => enterFullscreen();
     document.getElementById('searchInput').addEventListener('input', () => renderChannels());
     document.getElementById('categorySelect').addEventListener('change', () => renderChannels());
     document.getElementById('themeToggle').onclick = () => {
         document.body.classList.toggle('light');
         const icon = document.querySelector('#themeToggle i');
-        if (document.body.classList.contains('light')) icon.classList.replace('fa-moon', 'fa-sun');
-        else icon.classList.replace('fa-sun', 'fa-moon');
+        const text = document.querySelector('#themeToggle span');
+        if (document.body.classList.contains('light')) {
+            icon.classList.replace('fa-moon', 'fa-sun');
+            text.innerHTML = ' تاریک';
+        } else {
+            icon.classList.replace('fa-sun', 'fa-moon');
+            text.innerHTML = ' ڕووناکی';
+        }
     };
 
     populateCategories();
