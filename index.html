@@ -2,444 +2,369 @@
 <html lang="ku" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>yariga_spi sports</title>
-    <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>SPI TV - پەخشی پیشەسازی</title>
+    <!-- HLS.js -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body { 
-            background: #0a0a0a; 
-            color: #fff; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Tahoma', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0a0f1e 0%, #0a1a2f 100%);
             min-height: 100vh;
-        }
-        
-        /* 🔥 iStar Style Header */
-        .istar-header {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
             padding: 20px;
+        }
+
+        /* Glassmorphism Container */
+        .glass-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(15, 25, 45, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 45px rgba(0,0,0,0.3);
+        }
+
+        /* Header Section */
+        .header {
             text-align: center;
-            border-bottom: 3px solid #e94560;
-            box-shadow: 0 4px 30px rgba(233, 69, 96, 0.3);
+            margin-bottom: 30px;
+            position: relative;
         }
-        
-        .istar-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-        }
-        
-        .istar-logo i {
-            font-size: 2.5rem;
-            color: #e94560;
-            text-shadow: 0 0 20px rgba(233, 69, 96, 0.8);
-        }
-        
-        .istar-logo h1 {
-            font-size: 2rem;
+
+        .logo {
+            font-size: 2.8rem;
             font-weight: bold;
-            background: linear-gradient(90deg, #fff, #e94560);
+            background: linear-gradient(135deg, #FF416C, #FF4B2B);
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
             letter-spacing: 2px;
         }
-        
-        .istar-logo span {
-            color: #e94560;
-            font-weight: normal;
+
+        .logo span {
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
-        
-        /* 🔥 Main Container */
-        .container { 
-            width: 95%; 
-            max-width: 1400px; 
-            margin: 20px auto; 
-            padding: 10px; 
+
+        .subtitle {
+            color: rgba(255,255,255,0.7);
+            margin-top: 10px;
+            font-size: 0.9rem;
         }
-        
-        /* 🔥 Player Section - iStar Style */
-        .player-section { 
-            background: linear-gradient(145deg, #1a1a2e, #16213e);
-            border-radius: 20px; 
-            overflow: hidden; 
-            border: 2px solid #e94560; 
-            margin-bottom: 25px;
-            box-shadow: 0 0 40px rgba(233, 69, 96, 0.2);
-        }
-        
-        .player-header { 
-            background: linear-gradient(90deg, #e94560, #0f3460); 
-            color: #fff; 
-            padding: 15px 20px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between;
-        }
-        
-        .player-title {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: 50px;
+            padding: 10px 18px;
+            cursor: pointer;
+            color: white;
             font-size: 1.2rem;
-            font-weight: bold;
+            backdrop-filter: blur(5px);
         }
-        
-        .player-title i {
-            color: #ffd700;
-        }
-        
-        .live-badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255, 0, 0, 0.2);
-            padding: 8px 16px;
-            border-radius: 25px;
-            border: 1px solid #ff4444;
-        }
-        
-        .live-dot { 
-            width: 12px; 
-            height: 12px; 
-            background: #ff0000; 
-            border-radius: 50%; 
-            animation: pulse 1.5s infinite;
-            box-shadow: 0 0 15px #ff0000;
-        }
-        
-        @keyframes pulse { 
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
-        }
-        
-        .video-js { 
-            width: 100%; 
-            height: auto; 
-            min-height: 300px; 
-            background: #000; 
-        }
-        
-        /* 🔥 Channels Section - iStar Grid */
-        .channels-section {
-            background: linear-gradient(145deg, #1a1a2e, #0f3460);
-            border-radius: 20px;
-            padding: 25px;
-            border: 1px solid #e94560;
-        }
-        
-        .section-title {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-            color: #e94560;
-            border-bottom: 2px solid #e94560;
-            padding-bottom: 15px;
-        }
-        
-        .section-title i {
-            font-size: 1.5rem;
-        }
-        
-        .channels-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
-            gap: 15px; 
-        }
-        
-        /* 🔥 iStar Channel Button */
-        .channel-btn {
-            background: linear-gradient(145deg, #16213e, #0f3460);
-            border: 2px solid #0f3460; 
-            color: #fff; 
-            padding: 18px 15px; 
-            border-radius: 15px; 
-            cursor: pointer; 
-            text-align: center; 
-            font-size: 0.95rem; 
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            position: relative;
+
+        /* Video Player Section */
+        .player-section {
+            background: #000;
+            border-radius: 30px;
             overflow: hidden;
+            margin-bottom: 35px;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.2);
         }
-        
-        .channel-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
+
+        #videoPlayer {
             width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(233, 69, 96, 0.3), transparent);
-            transition: 0.5s;
+            background: #000;
+            aspect-ratio: 16/9;
         }
-        
-        .channel-btn:hover::before {
-            left: 100%;
+
+        .current-channel-info {
+            padding: 15px 20px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.6));
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
         }
-        
-        .channel-btn:hover { 
-            background: linear-gradient(145deg, #e94560, #0f3460); 
-            border-color: #e94560;
-            transform: translateY(-5px) scale(1.02); 
-            box-shadow: 0 10px 30px rgba(233, 69, 96, 0.4);
-        }
-        
-        .channel-btn.active { 
-            background: linear-gradient(145deg, #e94560, #ff6b6b); 
-            border-color: #fff;
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(233, 69, 96, 0.8);
-        }
-        
-        .channel-btn i {
-            font-size: 1.8rem;
-            color: #e94560;
-            transition: 0.3s;
-        }
-        
-        .channel-btn:hover i,
-        .channel-btn.active i {
-            color: #fff;
-        }
-        
-        .channel-name {
+
+        .channel-title {
+            font-size: 1.3rem;
             font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        
-        .quality-badge {
-            font-size: 0.75rem;
+
+        .live-badge {
+            background: #e50914;
             padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; transform: scale(0.95);}
+            100% { opacity: 1; transform: scale(1);}
+        }
+
+        /* Search Bar */
+        .search-bar {
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-bar input {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px 20px;
+            border-radius: 50px;
+            border: none;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            text-align: right;
+        }
+
+        .search-bar input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* Channels Grid */
+        .channels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 18px;
+            max-height: 550px;
+            overflow-y: auto;
+            padding: 5px;
+        }
+
+        .channel-card {
+            background: rgba(20, 30, 55, 0.7);
+            backdrop-filter: blur(5px);
             border-radius: 20px;
-            font-weight: bold;
-        }
-        
-        .quality-4k {
-            background: linear-gradient(90deg, #ffd700, #ffaa00);
-            color: #000;
-        }
-        
-        .quality-hd {
-            background: linear-gradient(90deg, #00ff88, #00cc6a);
-            color: #000;
-        }
-        
-        .quality-sd {
-            background: linear-gradient(90deg, #66ccff, #3399ff);
-            color: #000;
-        }
-        
-        /* 🔥 Error & Loading */
-        .error-msg {
-            background: rgba(233, 69, 96, 0.2);
-            border: 2px solid #e94560;
-            color: #ff6b6b;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px;
+            padding: 15px 10px;
+            cursor: pointer;
             text-align: center;
-            display: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .channel-card:hover {
+            transform: translateY(-5px);
+            background: rgba(40, 55, 90, 0.8);
+            border-color: #FF4B2B;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .channel-card.active {
+            background: linear-gradient(135deg, #FF416C, #FF4B2B);
+            border: none;
+        }
+
+        .channel-icon {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+
+        .channel-name {
+            font-size: 0.85rem;
             font-weight: bold;
+            margin-bottom: 5px;
         }
-        
-        .loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #e94560;
-            font-size: 1.2rem;
-            display: none;
-            font-weight: bold;
+
+        .channel-status {
+            font-size: 0.7rem;
+            opacity: 0.8;
         }
-        
-        /* 🔥 Footer */
-        .istar-footer {
-            text-align: center;
-            padding: 20px;
-            margin-top: 30px;
-            color: #666;
-            border-top: 1px solid #333;
+
+        /* Light Theme */
+        body.light {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+            color: #1a1a2e;
         }
-        
-        /* 🔥 Scrollbar */
-        ::-webkit-scrollbar { width: 10px; }
-        ::-webkit-scrollbar-track { background: #0a0a0a; }
-        ::-webkit-scrollbar-thumb { 
-            background: linear-gradient(180deg, #e94560, #0f3460); 
+
+        body.light .glass-container {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(0,0,0,0.1);
+        }
+
+        body.light .channel-card {
+            background: rgba(255,255,255,0.7);
+            color: #1a1a2e;
+        }
+
+        /* Scrollbar */
+        .channels-grid::-webkit-scrollbar {
+            width: 8px;
+        }
+        .channels-grid::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
             border-radius: 10px;
         }
-        
-        /* 🔥 Responsive */
+        .channels-grid::-webkit-scrollbar-thumb {
+            background: #FF4B2B;
+            border-radius: 10px;
+        }
+
         @media (max-width: 768px) {
-            .istar-logo h1 { font-size: 1.3rem; }
-            .channels-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
-            .channel-btn { padding: 15px 10px; }
+            .glass-container { padding: 15px; }
+            .channels-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+            .channel-name { font-size: 0.75rem; }
         }
     </style>
 </head>
 <body>
+<div class="glass-container">
+    <div class="header">
+        <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i> ڕووناک/تاریک</button>
+        <div class="logo">SPI <span>TV</span> 4K</div>
+        <div class="subtitle">پەخشی ڕاستەوخۆ بە کوالێتی 4K</div>
+    </div>
 
-    <!-- 🔥 iStar Header -->
-    <div class="istar-header">
-        <div class="istar-logo">
-            <i class="fas fa-satellite-dish"></i>
-            <h1>yariga_<span>spi sports</span></h1>
+    <div class="player-section">
+        <video id="videoPlayer" controls class="video-js vjs-default-skin"></video>
+        <div class="current-channel-info">
+            <div class="channel-title">
+                <i class="fas fa-tv"></i>
+                <span id="currentChannelName">هیچ کەناڵێک هەڵنەبژێراوە</span>
+            </div>
+            <div class="live-badge"><i class="fas fa-circle"></i> LIVE</div>
         </div>
     </div>
 
-    <div class="container">
-        <!-- 🔥 Player Section -->
-        <div class="player-section">
-            <div class="player-header">
-                <div class="player-title">
-                    <i class="fas fa-play-circle"></i>
-                    <span id="ch-name">هەڵبژاردنی کەناڵ</span>
-                </div>
-                <div class="live-badge">
-                    <span class="live-dot"></span>
-                    <span>LIVE</span>
-                </div>
-            </div>
-            <div class="error-msg" id="error-msg">
-                <i class="fas fa-exclamation-triangle"></i> هەڵە لە بارکردنی ڤیدیۆ
-            </div>
-            <div class="loading" id="loading">
-                <i class="fas fa-spinner fa-spin"></i> چاوەڕێ بە...
-            </div>
-            <video id="main-video" class="video-js vjs-default-skin vjs-16-9" controls preload="metadata" muted></video>
-        </div>
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="🔍 گەڕان لە کەناڵەکاندا...">
+    </div>
+
+    <div class="channels-grid" id="channelsGrid"></div>
+</div>
+
+<script>
+    // ==================== کەناڵەکانت ====================
+    const channels = [
+        { name: "SPI TV 4K", url: "https://live20.bozztv.com/giatv/giatv-spitv4k_kamalblbas/spitv4k_kamalblbas/chunks.m3u8", icon: "fas fa-tv", group: "SPI" },
+        { name: "ESRA HD", url: "https://live20.bozztv.com/giatv/giatv-ESRAHD/ESRAHD/chunks.m3u8", icon: "fas fa-film", group: "HD" },
+        { name: "Esra 2 HD", url: "https://live20.bozztv.com/giatv/giatv-esra2hd_kamalblbas/esra2hd_kamalblbas/chunks.m3u8", icon: "fas fa-play-circle", group: "HD" },
+        { name: "Sharq Quran TV", url: "https://live20.bozztv.com/giatv/giatv-sharqurantv/sharqurantv/chunks.m3u8", icon: "fas fa-quran", group: "دینی" },
+        // زیادکردنی کەناڵەکانی ترت (spiquranhd, spikids4k2025, spisportshd, dekanquran)
+        { name: "SPI Quran HD", url: "", icon: "fas fa-mosque", group: "دینی" },
+        { name: "SPI Kids 4K", url: "", icon: "fas fa-child", group: "مناڵان" },
+        { name: "SPI Sports HD", url: "", icon: "fas fa-futbol", group: "وەرزشی" },
+        { name: "Dekan Quran", url: "", icon: "fas fa-star-and-crescent", group: "دینی" }
+    ];
+
+    // ==================== کۆدی سەرەکی ====================
+    let currentPlayer = null;
+    let currentChannelIndex = -1;
+
+    // ڕێکخستنی HLS.js
+    function initPlayer() {
+        const video = document.getElementById('videoPlayer');
+        if (Hls.isSupported()) {
+            const hls = new Hls({ capLevelToPlayerSize: true });
+            hls.attachMedia(video);
+            return hls;
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            return null;
+        } else {
+            alert('براوسەرەکەت پشتیوانی پەخشی زیندوو ناکات');
+            return null;
+        }
+    }
+
+    let hlsPlayer = initPlayer();
+
+    function playChannel(index) {
+        if (index < 0 || index >= channels.length) return;
+        const channel = channels[index];
+        if (!channel.url || channel.url === "") {
+            document.getElementById('currentChannelName').innerHTML = `${channel.name} (بەستەر نییە)`;
+            return;
+        }
+        currentChannelIndex = index;
+        document.getElementById('currentChannelName').innerHTML = channel.name;
         
-        <!-- 🔥 Channels Section -->
-        <div class="channels-section">
-            <div class="section-title">
-                <i class="fas fa-th-large"></i>
-                <span>کەناڵەکان</span>
-            </div>
-            <div class="channels-grid" id="channel-grid"></div>
-        </div>
-    </div>
-
-    <!-- 🔥 Footer -->
-    <div class="istar-footer">
-        <p>© 2024 yariga_spi sports - All Rights Reserved</p>
-    </div>
-
-    <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
-    <script>
-        // 📺 کەناڵەکان
-        const channels = [
-            { name:"SPI Quran HD", url:"https://live20.bozztv.com/giatv/giatv-spi_quran_hd/spi_quran_hd/chunks.m3u8", quality:"HD", icon:"fa-book-quran" },
-            { name:"Dekan Quran", url:"https://live20.bozztv.com/giatv/giatv-dekanquran/dekanquran/chunks.m3u8", quality:"HD", icon:"fa-mosque" },
-            { name:"SPI TV 4K", url:"https://live20.bozztv.com/giatv/giatv-spitv4k_kamalblbas/spitv4k_kamalblbas/chunks.m3u8", quality:"HD", icon:"fa-tv" },
-            { name:"SPI Sports HD", url:"https://live20.bozztv.com/giatv/giatv-spi_sports_hd/spi_sports_hd/chunks.m3u8", quality:"HD", icon:"fa-futbol" },
-
-            // 🔥 BEIN 4K
-            { name:"BEIN News 4K", url:"http://a83967.xyz:8080/971424234/942337642/375047", quality:"4K", icon:"fa-newspaper" },
-            { name:"BEIN Ultra 4K", url:"http://a83967.xyz:8080/971424234/942337642/464382", quality:"4K", icon:"fa-star" },
-            { name:"BEIN 2 4K", url:"http://a83967.xyz:8080/971424234/942337642/219719", quality:"4K", icon:"fa-futbol" },
-            { name:"BEIN 3 4K", url:"http://a83967.xyz:8080/971424234/942337642/129372", quality:"4K", icon:"fa-futbol" },
-            { name:"BEIN 5 4K", url:"http://a83967.xyz:8080/971424234/942337642/129374", quality:"4K", icon:"fa-futbol" },
-            { name:"BEIN 7 4K", url:"http://a83967.xyz:8080/971424234/942337642/375051", quality:"4K", icon:"fa-futbol" },
-            { name:"BEIN 8 4K", url:"http://a83967.xyz:8080/971424234/942337642/375050", quality:"4K", icon:"fa-futbol" },
-
-            // 🔥 BEIN HD
-            { name:"BEIN 1 HD", url:"http://a83967.xyz:8080/971424234/942337642/124234", quality:"HD", icon:"fa-futbol" },
-            { name:"BEIN 2 HD", url:"http://a83967.xyz:8080/971424234/942337642/219728", quality:"HD", icon:"fa-futbol" },
-            { name:"BEIN 3 HD", url:"http://a83967.xyz:8080/971424234/942337642/380478", quality:"HD", icon:"fa-futbol" },
-            { name:"BEIN 4 HD", url:"http://a83967.xyz:8080/971424234/942337642/247201", quality:"HD", icon:"fa-futbol" },
-            { name:"BEIN 9 HD", url:"http://a83967.xyz:8080/971424234/942337642/124242", quality:"HD", icon:"fa-futbol" },
-
-            // 🔥 SD
-            { name:"BEIN 3 SD", url:"http://a83967.xyz:8080/971424234/942337642/247209", quality:"SD", icon:"fa-futbol" },
-            { name:"BEIN 4 SD", url:"http://a83967.xyz:8080/971424234/942337642/219739", quality:"SD", icon:"fa-futbol" },
-            { name:"BEIN 7 SD", url:"http://a83967.xyz:8080/971424234/942337642/384168", quality:"SD", icon:"fa-futbol" },
-
-            // 🔥 ALWAN
-            { name:"Alwan Sport 1 4K", url:"http://a83967.xyz:8080/971424234/942337642/288315", quality:"4K", icon:"fa-trophy" },
-            { name:"Alwan Sport 2 HD", url:"http://a83967.xyz:8080/971424234/942337642/288311", quality:"HD", icon:"fa-trophy" },
-            { name:"Alwan Sport 3 HD", url:"http://a83967.xyz:8080/971424234/942337642/288308", quality:"HD", icon:"fa-trophy" },
-            { name:"Alwan UFC 4K", url:"http://a83967.xyz:8080/971424234/942337642/384822", quality:"4K", icon:"fa-hand-fist" },
-            { name:"Alwan F1 4K", url:"http://a83967.xyz:8080/971424234/942337642/384827", quality:"4K", icon:"fa-flag-checkered" }
-        ];
-
-        const player = videojs('main-video', {
-            html5: { hls: { overrideNative: true }, nativeAudioTracks: false, nativeVideoTracks: false },
-            fluid: true, aspectRatio: '16:9', controls: true, preload: 'metadata', muted: true, autoplay: false
-        });
-
-        const channelGrid = document.getElementById('channel-grid');
-        const chName = document.getElementById('ch-name');
-        const errorMsg = document.getElementById('error-msg');
-        const loading = document.getElementById('loading');
-
-        function getQualityClass(quality) {
-            switch(quality) {
-                case '4K': return 'quality-4k';
-                case 'HD': return 'quality-hd';
-                case 'SD': return 'quality-sd';
-                default: return 'quality-hd';
-            }
+        const video = document.getElementById('videoPlayer');
+        if (hlsPlayer) {
+            hlsPlayer.loadSource(channel.url);
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = channel.url;
         }
-
-        function renderChannels() {
-            channelGrid.innerHTML = '';
-            channels.forEach((channel, index) => {
-                const btn = document.createElement('div');
-                btn.className = 'channel-btn';
-                btn.innerHTML = `
-                    <i class="fas ${channel.icon}"></i>
-                    <span class="channel-name">${channel.name}</span>
-                    <span class="quality-badge ${getQualityClass(channel.quality)}">${channel.quality}</span>
-                `;
-                btn.onclick = () => playChannel(channel, btn);
-                channelGrid.appendChild(btn);
-            });
-        }
-
-        function playChannel(channel, btnElement) {
-            document.querySelectorAll('.channel-btn').forEach(b => b.classList.remove('active'));
-            btnElement.classList.add('active');
-            chName.innerHTML = `<i class="fas fa-play-circle"></i> ${channel.name}`;
-            errorMsg.style.display = 'none';
-            loading.style.display = 'block';
-            
-            try {
-                player.src({ src: channel.url, type: 'application/x-mpegURL' });
-                player.play().catch(e => {
-                    errorMsg.innerHTML = '<i class="fas fa-exclamation-triangle"></i> تکایە کلیک لەسەر پلەیر بکە';
-                    errorMsg.style.display = 'block';
-                });
-            } catch (err) {
-                errorMsg.innerHTML = '<i class="fas fa-exclamation-triangle"></i> نەتوانرا کەناڵەکە بکرێتەوە';
-                errorMsg.style.display = 'block';
-            } finally { 
-                loading.style.display = 'none'; 
-            }
-        }
-
-        player.on('error', () => {
-            errorMsg.innerHTML = '<i class="fas fa-exclamation-triangle"></i> هەڵە لە بارکردنی ڤیدیۆ';
-            errorMsg.style.display = 'block'; 
-            loading.style.display = 'none';
-        });
+        video.play().catch(e => console.log("پەخش نەکرا:", e));
         
-        player.on('playing', () => errorMsg.style.display = 'none');
-
-        document.addEventListener('DOMContentLoaded', () => {
-            renderChannels();
-            if (channels.length > 0) playChannel(channels[0], document.querySelector('.channel-btn'));
+        // نوێکردنەوەی چالاکی لە کارتەکان
+        document.querySelectorAll('.channel-card').forEach((card, i) => {
+            if (i === index) card.classList.add('active');
+            else card.classList.remove('active');
         });
-    </script>
+    }
+
+    function renderChannels(filterText = "") {
+        const grid = document.getElementById('channelsGrid');
+        grid.innerHTML = "";
+        const filtered = channels.filter(ch => ch.name.toLowerCase().includes(filterText.toLowerCase()));
+        filtered.forEach((ch, idx) => {
+            const originalIndex = channels.findIndex(c => c.name === ch.name && c.url === ch.url);
+            const card = document.createElement('div');
+            card.className = 'channel-card';
+            if (originalIndex === currentChannelIndex) card.classList.add('active');
+            card.innerHTML = `
+                <div class="channel-icon"><i class="${ch.icon}"></i></div>
+                <div class="channel-name">${ch.name}</div>
+                <div class="channel-status"><i class="fas fa-wifi"></i> زیندوو</div>
+            `;
+            card.onclick = () => playChannel(originalIndex);
+            grid.appendChild(card);
+        });
+    }
+
+    // گۆڕینی ڕووناکی/تاریک
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.onclick = () => {
+        document.body.classList.toggle('light');
+        const icon = themeToggle.querySelector('i');
+        if (document.body.classList.contains('light')) {
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+        } else {
+            icon.classList.remove('fa-sun');
+            icon.classList.add('fa-moon');
+        }
+    };
+
+    // گەڕان
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        renderChannels(e.target.value);
+    });
+
+    renderChannels();
+</script>
 </body>
 </html>
